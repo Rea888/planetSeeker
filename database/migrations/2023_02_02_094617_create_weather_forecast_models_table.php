@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('weather_forecast_models', function (Blueprint $table) {
+            $table->id();
+            $table->float('latitude');
+            $table->float('longitude');
+            $table->dateTime('date_time_of_measurement');
+            $table->float('temperature');
+            $table->timestamps();
+
+            $table->unique(['latitude', 'longitude', 'date_time_of_measurement']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('weather_forecast_models');
+    }
+};
