@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('weather_forecast_models', function (Blueprint $table) {
             $table->id();
-            $table->float('latitude');
-            $table->float('longitude');
+            $table->float('latitude',10,6);
+            $table->float('longitude', 10,6);
             $table->dateTime('date_time_of_measurement');
             $table->float('temperature');
             $table->timestamps();
 
-            $table->unique(['latitude', 'longitude', 'date_time_of_measurement']);
+            $table->unique(['latitude', 'longitude', 'date_time_of_measurement'], 'place_time_unique');
         });
     }
 

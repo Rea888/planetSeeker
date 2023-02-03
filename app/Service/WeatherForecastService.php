@@ -14,16 +14,16 @@ class WeatherForecastService
         foreach ($apiResponse['hourly']['time'] as $key => $dateTimeOfMeasurement) {
             $temperature = $apiResponse['hourly']['temperature_2m'][$key];
 
-            $weatherForecastModel = new WeatherForecastModel();
-            $weatherForecastModel->longitude = $longitude;
-            $weatherForecastModel->latitude = $latitude;
-            $weatherForecastModel->date_time_of_measurement = $dateTimeOfMeasurement;
-            $weatherForecastModel->temperature = $temperature;
-            var_dump($weatherForecastModel);
-//            $WeatherForecastModel->save();
+            WeatherForecastModel::updateOrCreate(
+                [
+                    'longitude' => $longitude,
+                    'latitude' => $latitude,
+                    'date_time_of_measurement' => $dateTimeOfMeasurement,
 
+                ],
+                [
+                    'temperature' => $temperature,
+                ]
+            );
         }
-
-
     }
-}
