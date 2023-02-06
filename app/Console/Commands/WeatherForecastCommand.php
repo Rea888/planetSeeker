@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\API\APIcalling;
 use App\Service\WeatherForecastService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 
 class WeatherForecastCommand extends Command
 {
@@ -33,11 +34,11 @@ class WeatherForecastCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        $get_data = APIcalling::callAPI('GET', 'https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m', false);
+        $get_data = Http::get('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m');
         $response = json_decode($get_data, true);
         $this->weatherForecastService->processApiResponse($response);
     }

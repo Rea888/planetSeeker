@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\API\APIcalling;
 use App\Service\WeatherForecastService;
-use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Http;
 class WeatherForecastController extends Controller
 {
 
@@ -16,12 +14,15 @@ class WeatherForecastController extends Controller
 
         $this->weatherForecastService = $weatherForecastService;
     }
+
     public function getWeather()
     {
 
-        $get_data = APIcalling::callAPI('GET', 'https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m', false);
+        $get_data = Http::get('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m');
         $response = json_decode($get_data, true);
         $this->weatherForecastService->processApiResponse($response);
 
     }
+
+
 }

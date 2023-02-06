@@ -17,4 +17,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
+Route::get('/weather' , [\App\Http\Controllers\WeatherForecastController::class, 'sendDestination']);
