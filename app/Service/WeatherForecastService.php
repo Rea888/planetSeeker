@@ -6,7 +6,7 @@ use App\Models\WeatherForecastModel;
 
 class WeatherForecastService
 {
-    public function processApiResponse(array $apiResponse)
+    public function processWeatherApiResponse(array $apiResponse) :void
     {
         $longitude = $apiResponse['longitude'];
         $latitude = $apiResponse['latitude'];
@@ -26,5 +26,13 @@ class WeatherForecastService
                 ]
             );
         }
+    }
+
+
+    public function processMapApiResponse(array $apiResponse) :array
+    {
+        $latitude= $apiResponse['results'][0]['geometry']['location']['lat'];
+        $longitude = $apiResponse['results'][0]['geometry']['location']['lng'];
+        return array($latitude,$longitude);
     }
 }
