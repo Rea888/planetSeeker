@@ -2,20 +2,19 @@
 
 namespace App\Console\Commands;
 
-use App\Models\API\APIcalling;
-use App\Service\WeatherForecastService;
+use App\Http\Controllers\WeatherForecastController;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 
 class WeatherForecastCommand extends Command
 {
 
-    private WeatherForecastService $weatherForecastService;
 
-    public function __construct(WeatherForecastService $weatherForecastService)
+    private WeatherForecastController $weatherForecastController;
+
+    public function __construct(WeatherForecastController $weatherForecastController)
     {
         parent::__construct();
-        $this->weatherForecastService = $weatherForecastService;
+        $this->weatherForecastController = $weatherForecastController;
     }
     /**
      * The name and signature of the console command.
@@ -38,8 +37,7 @@ class WeatherForecastCommand extends Command
      */
     public function handle(): void
     {
-        $get_data = Http::get('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m');
-        $response = json_decode($get_data, true);
-        $this->weatherForecastService->processApiResponse($response);
+        $this->weatherForecastController->getWeather('Moscow');
+
     }
 }
