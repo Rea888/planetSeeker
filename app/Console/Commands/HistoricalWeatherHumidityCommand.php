@@ -2,18 +2,18 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\HistoricalWeatherHumidityController;
+use App\Service\HistoricalWeatherHumidityService;
 use Illuminate\Console\Command;
 
 class HistoricalWeatherHumidityCommand extends Command
 {
 
-    private HistoricalWeatherHumidityController $historicalWeatherHumidityController;
+    private HistoricalWeatherHumidityService $historicalWeatherHumidityService;
 
-    public function __construct(HistoricalWeatherHumidityController $historicalWeatherHumidityController)
+    public function __construct(HistoricalWeatherHumidityService $historicalWeatherHumidityService)
     {
         parent::__construct();
-        $this->historicalWeatherHumidityController = $historicalWeatherHumidityController;
+        $this->historicalWeatherHumidityService = $historicalWeatherHumidityService;
     }
 
     /**
@@ -21,7 +21,7 @@ class HistoricalWeatherHumidityCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'historicalWeatherHumidity:progress';
+    protected $signature = 'historicalWeatherHumidity:progress {cityName} {year} {month}';
 
     /**
      * The console command description.
@@ -37,6 +37,9 @@ class HistoricalWeatherHumidityCommand extends Command
      */
     public function handle()
     {
-        $this->historicalWeatherHumidityController->getHistoricalWeatherHumidity('Paris','2013','01');
+        $cityName = $this->argument('cityName');
+        $year = $this->argument('year');
+        $month = $this->argument('month');
+        $this->historicalWeatherHumidityService->saveHistoricalWeatherHumidity($cityName, $year, $month);
     }
 }

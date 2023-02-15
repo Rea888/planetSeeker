@@ -25,8 +25,8 @@ class WeatherForecastController extends Controller
     {
 
         $latitudeAndLongitude = $this->longitudeLatitudeRepository->getLatitudeAndLongitude($cityName);
-        $latitude = $latitudeAndLongitude['0'];
-        $longitude = $latitudeAndLongitude['1'];
+        $latitude = $latitudeAndLongitude->getLatitude();
+        $longitude = $latitudeAndLongitude->getLongitude();
 
         $get_data = Http::get('https://api.open-meteo.com/v1/forecast?latitude=' . $latitude . '&longitude=' . $longitude . '&hourly=temperature_2m');
         $response = json_decode($get_data, true);
