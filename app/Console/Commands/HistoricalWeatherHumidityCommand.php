@@ -15,6 +15,7 @@ class HistoricalWeatherHumidityCommand extends Command
         parent::__construct();
         $this->historicalWeatherHumidityController = $historicalWeatherHumidityController;
     }
+
     /**
      * The name and signature of the console command.
      *
@@ -36,10 +37,6 @@ class HistoricalWeatherHumidityCommand extends Command
      */
     public function handle()
     {
-        $this->historicalWeatherHumidityController->getHistoricalWeatherHumidity('Paris');
-        $this->historicalWeatherHumidityController->getHistoricalWeatherHumidity('Moscow');
-        $this->historicalWeatherHumidityController->getHistoricalWeatherHumidity('Washington');
-        $this->historicalWeatherHumidityController->getHistoricalWeatherHumidity('London');
-        $this->historicalWeatherHumidityController->getHistoricalWeatherHumidity('Tokyo');
+        $this->historicalWeatherHumidityController->getHistoricalWeatherHumidity('Paris','2013','01');
     }
 }
