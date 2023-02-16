@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/date/{cityName}', [\App\Http\Controllers\HistoricalWeatherHumidityController::class, 'getHistoricalWeatherHumidity']);
+Route::get('/save', [\App\Http\Controllers\HistoricalWeatherHumidityController::class, 'saveHumidityToDb']);
 
 //Route::get('/date', function (){
 //

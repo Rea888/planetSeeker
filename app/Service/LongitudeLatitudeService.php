@@ -2,13 +2,15 @@
 
 namespace App\Service;
 
+use App\Data\CoordinatesData;
+
 class LongitudeLatitudeService
 {
 
-    public function processMapApiResponse(array $apiResponse) :array
+    public function processMapApiResponse(array $apiResponse): CoordinatesData
     {
-        $latitude= $apiResponse['results'][0]['geometry']['location']['lat'];
-        $longitude = $apiResponse['results'][0]['geometry']['location']['lng'];
-        return array($latitude,$longitude);
+        $latitude = (float)$apiResponse['results'][0]['geometry']['location']['lat'];
+        $longitude = (float)$apiResponse['results'][0]['geometry']['location']['lng'];
+        return new CoordinatesData($longitude, $latitude);
     }
 }
