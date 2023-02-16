@@ -25,10 +25,10 @@ class HistoricalWeatherHumidityService
             $humidity = $apiResponse['hourly']['relativehumidity_2m'][$key];
 
             $historicalWeatherHumidity = new HistoricalWeatherHumidityModel();
-            $historicalWeatherHumidity['longitude'] = $longitude;
-            $historicalWeatherHumidity['latitude'] = $latitude;
-            $historicalWeatherHumidity['relative_humidity_2m'] = $humidity;
-            $historicalWeatherHumidity['date_time_of_measurement'] = $dateTimeOfMeasurement;
+            $historicalWeatherHumidity->longitude = $longitude;
+            $historicalWeatherHumidity->latitude = $latitude;
+            $historicalWeatherHumidity->relative_humidity_2m = $humidity;
+            $historicalWeatherHumidity->date_time_of_measurement = $dateTimeOfMeasurement;
             $historicalWeatherHumidity->save();
 
         }
