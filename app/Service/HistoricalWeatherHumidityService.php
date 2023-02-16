@@ -45,9 +45,9 @@ class HistoricalWeatherHumidityService
         $startDate = $year . '-' . $month . '-01';
         $endDate = date("Y-m-t", strtotime($startDate));
 
-        $get_data = Http::get('https://archive-api.open-meteo.com/v1/archive?latitude=' . $latitude . '&longitude=' . $longitude . '&start_date=' . $startDate . '&end_date=' . $endDate . '&hourly=relativehumidity_2m');
-        $response = json_decode($get_data, true);
-        $this->processHistoricalWeatherHumidityApiResponse($response);
+        $apiResponse = Http::get('https://archive-api.open-meteo.com/v1/archive?latitude=' . $latitude . '&longitude=' . $longitude . '&start_date=' . $startDate . '&end_date=' . $endDate . '&hourly=relativehumidity_2m');
+        $parsedResponse = json_decode($apiResponse, true);
+        $this->processHistoricalWeatherHumidityApiResponse($parsedResponse);
 
 
     }
