@@ -2,14 +2,6 @@
 return [
     'city_date' => [
 
-        'city' => [
-            'Paris',
-            'Moscow',
-            'Washington',
-            'London',
-            'Tokyo',
-        ],
-
         'year' => [
             '2013',
             '2014',
@@ -37,6 +29,13 @@ return [
             '10',
             '11',
             '12',
-        ]
+        ],
+        'city' => [
+            'Paris',
+            'Moscow',
+            'Washington',
+            'London',
+            'Tokyo',
+        ],
     ]
 ];
