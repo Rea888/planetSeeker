@@ -28,11 +28,7 @@ class HistoricalHumidityProcessCommand extends Command
         $this->historicalHumidityProcessingService = $historicalHumidityProcessingService;
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
+
     public function handle()
     {
         $this->historicalHumidityProcessingService->saveHumidityProcessToDb();

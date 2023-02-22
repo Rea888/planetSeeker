@@ -9,23 +9,24 @@ class HistoricalHumidityProcessingService
 
     public function saveHumidityProcessToDb(): void
     {
-        foreach (config('city_date.city_date')['year'] as $year) {
-            foreach (config('city_date.city_date')['month'] as $month) {
-                foreach (config('city_date.city_date')['city'] as $city) {
-                    if (intval($year) == 2023 && intval($month) >= 02) {
-                        exit();
-                    } else {
-
-                        HistoricalHumidityProcessingReportsModel::firstOrCreate(
-                            [
-                                'year' => intval($year),
-                                'month' => intval($month),
-                                'city' => $city,
-                            ]
-                        );
-                    }
+        try {
+            $startDate = new \DateTime(implode('","', config('city_date.start_date')));
+            $today = new \DateTime();
+            $cities = config('city_date.city');
+            while ($startDate < $today) {
+                foreach ($cities as $city) {
+                    HistoricalHumidityProcessingReportsModel::firstOrCreate(
+                        [
+                            'year' => $startDate->format('Y'),
+                            'month' => $startDate->format('m'),
+                            'city' => $city,
+                        ]
+                    );
                 }
+                $startDate = $startDate->add(new \DateInterval('P1M'));
             }
+        } catch (\Exception $e) {
+            echo $e;
         }
     }
 }
