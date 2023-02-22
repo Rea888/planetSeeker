@@ -1,5 +1,6 @@
 <?php
 
+use App\Service\HistoricalHumidityProcessingService;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,20 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/save', [\App\Http\Controllers\HistoricalWeatherHumidityController::class, 'saveHumidityToDb']);
+Route::get('/save', [HistoricalHumidityProcessingService::class, 'saveHumidityProcessToDb']);
 
-//Route::get('/date', function (){
-//
-//    $start = (new DateTime('2013-01-01'))->modify('first day of this month');
-//    $end = (new DateTime('2023-01-01'))->modify('first day of next month');
-//    $interval = DateInterval::createFromDateString('1 month');
-//    $period = new DatePeriod($start, $interval, $end);
-//    $data = array();
-//
-//    foreach ($period as $dt) {
-//        $data_month = array($dt->format("Y-m-d"));
-//        $data[] = $data_month;
-//    }
-//
-//     var_dump($data);
-//});
+
