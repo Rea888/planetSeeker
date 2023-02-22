@@ -10,7 +10,7 @@ class HistoricalHumidityProcessingService
     public function saveHumidityProcessToDb(): void
     {
         try {
-            $startDate = new \DateTime(implode('","', config('city_date.start_date')));
+            $startDate = new \DateTime(config('city_date.start_date'));
             $today = new \DateTime();
             $cities = config('city_date.city');
             while ($startDate < $today) {

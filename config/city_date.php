@@ -7,9 +7,5 @@ return [
         'London',
         'Tokyo',
     ],
-
-    'start_date' => [
-        '2013-01'
-    ]
-
+    'start_date' => '2013-01'
 ];
