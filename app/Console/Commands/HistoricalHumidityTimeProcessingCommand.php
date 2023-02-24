@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Service\HistoricalWeatherHumidityService;
 use Illuminate\Console\Command;
 
-class HistoricalHumidityTimeProcessing extends Command
+class HistoricalHumidityTimeProcessingCommand extends Command
 {
 
     /**
@@ -19,7 +19,7 @@ class HistoricalHumidityTimeProcessing extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Process a single entity from historical_humidity_processing_reports_models table';
     private HistoricalWeatherHumidityService $historicalWeatherHumidityService;
 
     public function __construct(HistoricalWeatherHumidityService $historicalWeatherHumidityService)
