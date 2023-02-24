@@ -30,16 +30,12 @@ class HistoricalWeatherHumidityCommand extends Command
      */
     protected $description = 'Command description';
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
+
     public function handle()
     {
         $cityName = $this->argument('cityName');
         $year = $this->argument('year');
         $month = $this->argument('month');
-        $this->historicalWeatherHumidityService->saveHistoricalWeatherHumidity($cityName, $year, $month);
+        $this->historicalWeatherHumidityService->getHistoricalHumidityFromApi($cityName, $year, $month);
     }
 }
