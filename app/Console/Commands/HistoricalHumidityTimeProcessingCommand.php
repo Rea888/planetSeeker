@@ -19,7 +19,7 @@ class HistoricalHumidityTimeProcessingCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Process a single entity from historical_humidity_processing_reports_models table';
+    protected $description = 'Process the next unprocessed single entity from historical_humidity_processing_reports_models table';
     private HistoricalWeatherHumidityService $historicalWeatherHumidityService;
 
     public function __construct(HistoricalWeatherHumidityService $historicalWeatherHumidityService)
@@ -30,6 +30,8 @@ class HistoricalHumidityTimeProcessingCommand extends Command
 
     public function handle()
     {
+        //create a service method somewhere with the name getNextUnprocessedHumidity (to get the first record from historical_humidity_processing_reports_models where processing began_at == null)
+        //then pass that model to the $this->historicalWeatherHumidityService->process
         $cityName = $this->argument('cityName');
         $year = $this->argument('year');
         $month = $this->argument('month');

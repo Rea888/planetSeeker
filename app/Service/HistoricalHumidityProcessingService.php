@@ -24,6 +24,7 @@ class HistoricalHumidityProcessingService
                             'city' => $city,
                         ]
                     );
+                    //TODO: add message to start processing this record
                 }
                 $startDate = $startDate->add(new DateInterval('P1M'));
             }
