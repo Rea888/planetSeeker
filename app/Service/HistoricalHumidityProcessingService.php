@@ -38,9 +38,8 @@ class HistoricalHumidityProcessingService
     {
         if ($id != null) {
             return HistoricalHumidityProcessingReportsModel::where('id', $id)->get();
-        } else {
-            return HistoricalHumidityProcessingReportsModel::where('processing_began_at', null)->first();
         }
+        return HistoricalHumidityProcessingReportsModel::where('processing_began_at', null)->first();
     }
 }
 
