@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Service\HistoricalHumidityProcessingService;
 use App\Service\HistoricalWeatherHumidityService;
 use Illuminate\Console\Command;
 
-class HistoricalHumidityTimeProcessingCommand extends Command
+class HistoricalHumidityGetNextUnprocessedCommand extends Command
 {
 
     /**
@@ -13,7 +14,7 @@ class HistoricalHumidityTimeProcessingCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'humidityTime:track {cityName} {year} {month}';
+    protected $signature = 'unprocessedHumidity:track {historicalWeatherHumidityModel}';
     /**
      * The console command description.
      *
@@ -21,20 +22,20 @@ class HistoricalHumidityTimeProcessingCommand extends Command
      */
     protected $description = 'Process the next unprocessed single entity from historical_humidity_processing_reports_models table';
     private HistoricalWeatherHumidityService $historicalWeatherHumidityService;
+    private HistoricalHumidityProcessingService $historicalHumidityProcessingService;
 
-    public function __construct(HistoricalWeatherHumidityService $historicalWeatherHumidityService)
+    public function __construct(HistoricalWeatherHumidityService $historicalWeatherHumidityService, HistoricalHumidityProcessingService $historicalHumidityProcessingService)
     {
         parent::__construct();
         $this->historicalWeatherHumidityService = $historicalWeatherHumidityService;
+        $this->historicalHumidityProcessingService = $historicalHumidityProcessingService;
     }
 
     public function handle()
     {
         //create a service method somewhere with the name getNextUnprocessedHumidity (to get the first record from historical_humidity_processing_reports_models where processing began_at == null)
         //then pass that model to the $this->historicalWeatherHumidityService->process
-        $cityName = $this->argument('cityName');
-        $year = $this->argument('year');
-        $month = $this->argument('month');
-        $this->historicalWeatherHumidityService->process($cityName, $year, $month);
+        $historicalWeatherHumidityModel = $this->historicalHumidityProcessingService->getNextUnprocessedHumidityModel();
+        $this->historicalWeatherHumidityService->process($historicalWeatherHumidityModel);
     }
 }
