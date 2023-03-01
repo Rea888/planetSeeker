@@ -19,7 +19,7 @@ class HistoricalHumidityProcessCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Process cities and dates since start date in config and save records into DB';
     private HistoricalHumidityProcessingService $historicalHumidityProcessingService;
 
     public function __construct(HistoricalHumidityProcessingService $historicalHumidityProcessingService)

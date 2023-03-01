@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('historical_weather_humidity_models', function (Blueprint $table) {
             $table->id();
-            $table->decimal('latitude',10,6);
-            $table->decimal('longitude', 10,6);
+            $table->decimal('latitude', 14, 10);
+            $table->decimal('longitude', 14, 10);
             $table->dateTime('date_time_of_measurement');
             $table->integer('relative_humidity_2m');
             $table->timestamps();
