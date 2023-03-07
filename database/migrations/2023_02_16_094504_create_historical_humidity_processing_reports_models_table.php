@@ -14,8 +14,8 @@ return new class extends Migration {
     {
         Schema::create('historical_humidity_processing_reports_models', function (Blueprint $table) {
             $table->id();
-            $table->integer('year');
-            $table->integer('month');
+            $table->string('year');
+            $table->string('month');
             $table->string('city');
             $table->dateTime('processing_began_at')->nullable();
             $table->dateTime('processing_finished_at')->nullable();

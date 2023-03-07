@@ -14,7 +14,7 @@ class HistoricalHumidityGetNextUnprocessedCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'unprocessedHumidity:track {historicalWeatherHumidityModel}';
+    protected $signature = 'unprocessedHumidity:track';
     /**
      * The console command description.
      *

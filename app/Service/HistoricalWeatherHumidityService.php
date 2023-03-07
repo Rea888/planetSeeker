@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Models\HistoricalHumidityProcessingReportsModel;
 use App\Models\HistoricalWeatherHumidityModel;
 use App\Repository\LongitudeLatitudeRepository;
 use Carbon\Carbon;
@@ -35,6 +36,7 @@ class HistoricalWeatherHumidityService
 
     public function processHistoricalWeatherHumidityApiResponse(array $apiResponse): void
     {
+
         $longitude = $apiResponse['longitude'];
         $latitude = $apiResponse['latitude'];
 
@@ -53,19 +55,18 @@ class HistoricalWeatherHumidityService
             );
         }
     }
-
-    public function process(HistoricalWeatherHumidityModel $historicalWeatherHumidityModel): void
+    public function process(HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel): void
     {
-        $historicalWeatherHumidityModel->processing_began_at = Carbon::now();
-        $historicalWeatherHumidityModel->save();
+        $historicalHumidityProcessingReportsModel->processing_began_at = Carbon::now();
+        $historicalHumidityProcessingReportsModel->save();
 
         $apiResponse = $this->getHistoricalHumidityFromApi(
-            $historicalWeatherHumidityModel->city,
-            $historicalWeatherHumidityModel->year,
-            $historicalWeatherHumidityModel->month);
+            $historicalHumidityProcessingReportsModel->city,
+            $historicalHumidityProcessingReportsModel->year,
+            $historicalHumidityProcessingReportsModel->month);
         $this->processHistoricalWeatherHumidityApiResponse($apiResponse);
 
-        $historicalWeatherHumidityModel->processing_finished_at = Carbon::now();
-        $historicalWeatherHumidityModel->save();
+        $historicalHumidityProcessingReportsModel->processing_finished_at = Carbon::now();
+        $historicalHumidityProcessingReportsModel->save();
     }
 }
