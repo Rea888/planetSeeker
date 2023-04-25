@@ -28,7 +28,7 @@ class HistoricalWeatherHumidityService
         $startDate = $year . '-' . $month . '-01';
         $endDate = date("Y-m-t", strtotime($startDate));
 
-        $apiResponse = Http::get('https://archive-api.open-meteo.com/v1/archive?latitude='.$latitude.'&longitude='.$longitude.'&start_date='.$startDate.'&end_date='.$endDate.'&hourly=relativehumidity_2m');
+        $apiResponse = Http::get(sprintf("https://archive-api.open-meteo.com/v1/archive?latitude=%s&longitude=%s&start_date=%s&end_date=%s&hourly=relativehumidity_2m", $latitude, $longitude, $startDate, $endDate));
         $parsedResponse = json_decode($apiResponse, true);
 
         return $parsedResponse;

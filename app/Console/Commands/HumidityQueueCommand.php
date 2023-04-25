@@ -32,7 +32,7 @@ class HumidityQueueCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Find the null dates in database and save the humidity in a queue';
+    protected $description = 'Find models with null dates and give them to a job to save its humidity in historical_weather_humidity database ';
 
 
     public function handle()
@@ -41,8 +41,6 @@ class HumidityQueueCommand extends Command
         foreach ($unprocessedHumidityModels as $unprocessedHumidityModel) {
             $job = new ProcessHumidity($unprocessedHumidityModel);
             dispatch($job);
-
-            // Provide feedback to the console
             $this->info(sprintf("ProcessHistoricalHumidity job (id: %s) dispatched to the queue.", $unprocessedHumidityModel->id));
         }
 
@@ -51,9 +49,6 @@ class HumidityQueueCommand extends Command
             $job = new ProcessHumidity($unprocessedHumidityModel);
             dispatch($job);
             $this->info(sprintf("ProcessHistoricalHumidity job (id: %s) dispatched to the queue.", $unprocessedHumidityModel->id));
-
-
         }
     }
-
 }
