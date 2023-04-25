@@ -34,12 +34,17 @@ class HistoricalHumidityProcessingService
         }
     }
 
-    public function getNextUnprocessedHumidityModel($id = null)
+    public function getUnprocessedHumidityModelsBeganAt()
     {
-        if ($id != null) {
-            return HistoricalHumidityProcessingReportsModel::where('id', $id)->get();
-        }
-        return HistoricalHumidityProcessingReportsModel::where('processing_began_at', null)->first();
+        return HistoricalHumidityProcessingReportsModel::where('processing_began_at', null)->get();
+
+    }
+
+    public function getUnprocessedHumidityModelsFinishedAt()
+    {
+
+            return HistoricalHumidityProcessingReportsModel::whereNull('processing_finished_at')->whereNotNull('processing_began_at')->get();
+
     }
 }
 

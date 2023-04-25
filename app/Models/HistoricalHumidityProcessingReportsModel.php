@@ -16,5 +16,4 @@ class HistoricalHumidityProcessingReportsModel extends Model
         'processing_began_at',
         'processing_finished_at'
     ];
-
 }
