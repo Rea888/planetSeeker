@@ -15,8 +15,9 @@ class HistoricalHumidityProcessingService
         try {
             $startDate = new DateTime(config('city_date.start_date'));
             $today = new DateTime();
+            $todayMinusOneMonth = $today->modify('-1 month');
             $cities = config('city_date.city');
-            while ($startDate < $today) {
+            while ($startDate < $todayMinusOneMonth) {
                 foreach ($cities as $city) {
                     HistoricalHumidityProcessingReportsModel::firstOrCreate(
                         [
@@ -25,7 +26,6 @@ class HistoricalHumidityProcessingService
                             'city' => $city,
                         ]
                     );
-                    //TODO: add message to start processing this record
                 }
                 $startDate = $startDate->add(new DateInterval('P1M'));
             }
@@ -43,7 +43,7 @@ class HistoricalHumidityProcessingService
     public function getUnprocessedHumidityModelsFinishedAt()
     {
 
-            return HistoricalHumidityProcessingReportsModel::whereNull('processing_finished_at')->whereNotNull('processing_began_at')->get();
+        return HistoricalHumidityProcessingReportsModel::whereNull('processing_finished_at')->whereNotNull('processing_began_at')->get();
 
     }
 }

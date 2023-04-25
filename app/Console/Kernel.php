@@ -16,6 +16,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('weatherforecast:process')->dailyAt('01:00');
+        $schedule->command('humidityProcess:save')->monthly();
+        $schedule->command('humidity:queue')->monthly();
+        $schedule->command('queue:work --stop-when-empty')->monthly();
+        $schedule->command('humidity:queue')->monthly();
+        $schedule->command('queue:work --stop-when-empty')->monthly();
     }
 
     /**
