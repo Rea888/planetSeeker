@@ -6,8 +6,11 @@ use App\Jobs\ProcessHumidity;
 use App\Service\HistoricalHumidityProcessingService;
 use App\Service\HistoricalWeatherHumidityService;
 use Illuminate\Console\Command;
+use Illuminate\Queue\Events\JobFailed;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 
-class HumidityQueueCommand extends Command
+class HumidityBeginQueueCommand extends Command
 {
 
 
@@ -25,14 +28,14 @@ class HumidityQueueCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'humidity:queue';
+    protected $signature = 'humidity:beginQue';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Find models with null dates and give them to a job to save its humidity in historical_weather_humidity database ';
+    protected $description = 'Find models with null value at processing_began_at and give them to a job to save its humidity in historical_weather_humidity database ';
 
 
     public function handle()
@@ -41,14 +44,6 @@ class HumidityQueueCommand extends Command
         foreach ($unprocessedHumidityModels as $unprocessedHumidityModel) {
             $job = new ProcessHumidity($unprocessedHumidityModel);
             dispatch($job);
-            $this->info(sprintf("ProcessHistoricalHumidity job (id: %s) dispatched to the queue.", $unprocessedHumidityModel->id));
-        }
-
-        $unprocessedHumidityModels = $this->historicalHumidityProcessingService->getUnprocessedHumidityModelsFinishedAt();
-        foreach ($unprocessedHumidityModels as $unprocessedHumidityModel) {
-            $job = new ProcessHumidity($unprocessedHumidityModel);
-            dispatch($job);
-            $this->info(sprintf("ProcessHistoricalHumidity job (id: %s) dispatched to the queue.", $unprocessedHumidityModel->id));
         }
     }
 }

@@ -37,14 +37,11 @@ class HistoricalHumidityProcessingService
     public function getUnprocessedHumidityModelsBeganAt()
     {
         return HistoricalHumidityProcessingReportsModel::where('processing_began_at', null)->get();
-
     }
 
     public function getUnprocessedHumidityModelsFinishedAt()
     {
-
         return HistoricalHumidityProcessingReportsModel::whereNull('processing_finished_at')->whereNotNull('processing_began_at')->get();
-
     }
 }
 

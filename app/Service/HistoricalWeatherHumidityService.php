@@ -15,7 +15,6 @@ class HistoricalWeatherHumidityService
 
     public function __construct(LongitudeLatitudeRepository $longitudeLatitudeRepository)
     {
-
         $this->longitudeLatitudeRepository = $longitudeLatitudeRepository;
     }
 

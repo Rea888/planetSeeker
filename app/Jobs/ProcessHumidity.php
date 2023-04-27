@@ -3,10 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\HistoricalHumidityProcessingReportsModel;
-use App\Service\HistoricalHumidityProcessingService;
 use App\Service\HistoricalWeatherHumidityService;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
