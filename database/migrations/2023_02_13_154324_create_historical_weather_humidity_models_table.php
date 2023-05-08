@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('weather_forecast_models', function (Blueprint $table) {
+        Schema::create('historical_weather_humidity_models', function (Blueprint $table) {
             $table->id();
-            $table->decimal('latitude',14,10);
-            $table->decimal('longitude', 14,10);
+            $table->decimal('latitude', 14, 10);
+            $table->decimal('longitude', 14, 10);
             $table->dateTime('date_time_of_measurement');
-            $table->decimal('temperature');
+            $table->integer('relative_humidity_2m');
             $table->timestamps();
 
             $table->unique(['latitude', 'longitude', 'date_time_of_measurement'], 'place_time_unique');
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('weather_forecast_models');
+        Schema::dropIfExists('historical_weather_humidity_models');
     }
 };

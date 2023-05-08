@@ -1,5 +1,6 @@
 <?php
 
+use App\Service\HistoricalHumidityProcessingService;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,4 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/weather' , [\App\Http\Controllers\WeatherForecastController::class, 'sendDestination']);
+Route::get('/save', [HistoricalHumidityProcessingService::class, 'saveHumidityProcessToDb']);
+
+

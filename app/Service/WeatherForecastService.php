@@ -19,20 +19,13 @@ class WeatherForecastService
                     'longitude' => $longitude,
                     'latitude' => $latitude,
                     'date_time_of_measurement' => $dateTimeOfMeasurement,
-
                 ],
                 [
-                    'temperature' => $temperature,
+                    'temperature' => $temperature
                 ]
             );
+
+
         }
-    }
-
-
-    public function processMapApiResponse(array $apiResponse) :array
-    {
-        $latitude= $apiResponse['results'][0]['geometry']['location']['lat'];
-        $longitude = $apiResponse['results'][0]['geometry']['location']['lng'];
-        return array($latitude,$longitude);
     }
 }

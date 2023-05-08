@@ -37,7 +37,10 @@ class WeatherForecastCommand extends Command
      */
     public function handle(): void
     {
-        $this->weatherForecastController->getWeather('Moscow');
-
+        $this->weatherForecastController->getWeatherForecastWeather('Paris');
+        $this->weatherForecastController->getWeatherForecastWeather('Moscow');
+        $this->weatherForecastController->getWeatherForecastWeather('Washington');
+        $this->weatherForecastController->getWeatherForecastWeather('London');
+        $this->weatherForecastController->getWeatherForecastWeather('Tokyo');
     }
 }
