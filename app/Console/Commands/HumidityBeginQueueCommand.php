@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ProcessHumidity;
-use App\Service\HistoricalHumidityProcessingService;
-use App\Service\HistoricalWeatherHumidityService;
+use App\Service\ModelProcessingService;
+use App\Service\ApiDataService;
 use Illuminate\Console\Command;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\DB;
@@ -14,9 +14,9 @@ class HumidityBeginQueueCommand extends Command
 {
 
 
-    private HistoricalHumidityProcessingService $historicalHumidityProcessingService;
+    private ModelProcessingService $historicalHumidityProcessingService;
 
-    public function __construct(HistoricalHumidityProcessingService $historicalHumidityProcessingService)
+    public function __construct(ModelProcessingService $historicalHumidityProcessingService)
     {
         parent::__construct();
 
@@ -40,7 +40,7 @@ class HumidityBeginQueueCommand extends Command
 
     public function handle()
     {
-        $unprocessedHumidityModels = $this->historicalHumidityProcessingService->getUnprocessedHumidityModelsBeganAt();
+        $unprocessedHumidityModels = $this->historicalHumidityProcessingService->getUnprocessedModelsBeganAt();
         foreach ($unprocessedHumidityModels as $unprocessedHumidityModel) {
             $job = new ProcessHumidity($unprocessedHumidityModel);
             dispatch($job);

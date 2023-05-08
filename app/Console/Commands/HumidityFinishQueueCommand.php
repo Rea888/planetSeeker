@@ -3,15 +3,15 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ProcessHumidity;
-use App\Service\HistoricalHumidityProcessingService;
+use App\Service\ModelProcessingService;
 use Illuminate\Console\Command;
 
 class HumidityFinishQueueCommand extends Command
 {
 
-    private HistoricalHumidityProcessingService $historicalHumidityProcessingService;
+    private ModelProcessingService $historicalHumidityProcessingService;
 
-    public function __construct(HistoricalHumidityProcessingService $historicalHumidityProcessingService)
+    public function __construct(ModelProcessingService $historicalHumidityProcessingService)
     {
         parent::__construct();
 
@@ -35,7 +35,7 @@ class HumidityFinishQueueCommand extends Command
 
     public function handle()
     {
-        $unprocessedHumidityModels = $this->historicalHumidityProcessingService->getUnprocessedHumidityModelsFinishedAt();
+        $unprocessedHumidityModels = $this->historicalHumidityProcessingService->getUnprocessedModelsFinishedAt();
         foreach ($unprocessedHumidityModels as $unprocessedHumidityModel) {
             $job = new ProcessHumidity($unprocessedHumidityModel);
             dispatch($job);

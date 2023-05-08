@@ -2,15 +2,15 @@
 
 namespace App\Console\Commands;
 
-use App\Service\HistoricalWeatherHumidityService;
+use App\Service\ApiDataService;
 use Illuminate\Console\Command;
 
 class HistoricalWeatherHumidityCommand extends Command
 {
 
-    private HistoricalWeatherHumidityService $historicalWeatherHumidityService;
+    private ApiDataService $historicalWeatherHumidityService;
 
-    public function __construct(HistoricalWeatherHumidityService $historicalWeatherHumidityService)
+    public function __construct(ApiDataService $historicalWeatherHumidityService)
     {
         parent::__construct();
         $this->historicalWeatherHumidityService = $historicalWeatherHumidityService;
@@ -36,6 +36,6 @@ class HistoricalWeatherHumidityCommand extends Command
         $cityName = $this->argument('cityName');
         $year = $this->argument('year');
         $month = $this->argument('month');
-        $this->historicalWeatherHumidityService->getHistoricalHumidityFromApi($cityName, $year, $month);
+        $this->historicalWeatherHumidityService->getParametersFromApi($cityName, $year, $month);
     }
 }

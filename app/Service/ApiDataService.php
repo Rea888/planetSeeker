@@ -8,7 +8,7 @@ use App\Repository\LongitudeLatitudeRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
-class HistoricalWeatherHumidityService
+class ApiDataService
 {
 
     private LongitudeLatitudeRepository $longitudeLatitudeRepository;
@@ -18,7 +18,7 @@ class HistoricalWeatherHumidityService
         $this->longitudeLatitudeRepository = $longitudeLatitudeRepository;
     }
 
-    public function getHistoricalHumidityFromApi($cityName, $year, $month): array
+    public function getParametersFromApi($cityName, $year, $month, $parameter): array
     {
         $latitudeAndLongitude = $this->longitudeLatitudeRepository->getLatitudeAndLongitude($cityName);
         $latitude = $latitudeAndLongitude->getLatitude();
@@ -27,45 +27,46 @@ class HistoricalWeatherHumidityService
         $startDate = $year . '-' . $month . '-01';
         $endDate = date("Y-m-t", strtotime($startDate));
 
-        $apiResponse = Http::get(sprintf("https://archive-api.open-meteo.com/v1/archive?latitude=%s&longitude=%s&start_date=%s&end_date=%s&hourly=relativehumidity_2m", $latitude, $longitude, $startDate, $endDate));
+        $apiResponse = Http::get(sprintf("https://archive-api.open-meteo.com/v1/archive?latitude=%s&longitude=%s&start_date=%s&end_date=%s&hourly=%s", $latitude, $longitude, $startDate, $endDate, $parameter));
         $parsedResponse = json_decode($apiResponse, true);
 
         return $parsedResponse;
     }
 
-    public function processHistoricalWeatherHumidityApiResponse(array $apiResponse): void
+    public function processApiResponse(array $apiResponse, string $modelClassName): void
     {
 
         $longitude = $apiResponse['longitude'];
         $latitude = $apiResponse['latitude'];
 
         foreach ($apiResponse['hourly']['time'] as $key => $dateTimeOfMeasurement) {
-            $humidity = $apiResponse['hourly']['relativehumidity_2m'][$key];
+            $parameter = $apiResponse['hourly'][$apiResponse['parameter']][$key];
 
-            HistoricalWeatherHumidityModel::updateOrCreate(
+            $modelClassName::updateOrCreate(
                 [
                     'longitude' => $longitude,
                     'latitude' => $latitude,
                     'date_time_of_measurement' => $dateTimeOfMeasurement,
                 ],
                 [
-                    'relative_humidity_2m' => $humidity,
+                    $apiResponse['parameter'] => $parameter,
                 ]
             );
         }
     }
-    public function process(HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel): void
+    public function process(string $modelClassName): void
     {
-        $historicalHumidityProcessingReportsModel->processing_began_at = Carbon::now();
-        $historicalHumidityProcessingReportsModel->save();
+        $modelClassName->processing_began_at = Carbon::now();
+        $modelClassName->save();
 
-        $apiResponse = $this->getHistoricalHumidityFromApi(
-            $historicalHumidityProcessingReportsModel->city,
-            $historicalHumidityProcessingReportsModel->year,
-            $historicalHumidityProcessingReportsModel->month);
-        $this->processHistoricalWeatherHumidityApiResponse($apiResponse);
+        $apiResponse = $this->getParametersFromApi(
+            $modelClassName->city,
+            $modelClassName->year,
+            $modelClassName->month,
+            $modelClassName->parameter);
+        $this->processApiResponse($apiResponse);
 
-        $historicalHumidityProcessingReportsModel->processing_finished_at = Carbon::now();
-        $historicalHumidityProcessingReportsModel->save();
+        $modelClassName->processing_finished_at = Carbon::now();
+        $modelClassName->save();
     }
 }

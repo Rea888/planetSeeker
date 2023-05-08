@@ -2,15 +2,14 @@
 
 namespace App\Service;
 
-use App\Models\HistoricalHumidityProcessingReportsModel;
 use DateInterval;
 use DateTime;
 use Exception;
 
 
-class HistoricalHumidityProcessingService
+class ModelProcessingService
 {
-    public function saveHumidityProcessToDb(): void
+    public function saveModelProcessToDb(string $modelClassName): void
     {
         try {
             $startDate = new DateTime(config('city_date.start_date'));
@@ -19,7 +18,7 @@ class HistoricalHumidityProcessingService
             $cities = config('city_date.city');
             while ($startDate < $todayMinusOneMonth) {
                 foreach ($cities as $city) {
-                    HistoricalHumidityProcessingReportsModel::firstOrCreate(
+                    $modelClassName::firstOrCreate(
                         [
                             'year' => $startDate->format('Y'),
                             'month' => $startDate->format('m'),
@@ -34,14 +33,14 @@ class HistoricalHumidityProcessingService
         }
     }
 
-    public function getUnprocessedHumidityModelsBeganAt()
+    public function getUnprocessedModelsBeganAt(string $modelClassName)
     {
-        return HistoricalHumidityProcessingReportsModel::where('processing_began_at', null)->get();
+        return $modelClassName::where('processing_began_at', null)->get();
     }
 
-    public function getUnprocessedHumidityModelsFinishedAt()
+    public function getUnprocessedModelsFinishedAt(string $modelClassName)
     {
-        return HistoricalHumidityProcessingReportsModel::whereNull('processing_finished_at')->whereNotNull('processing_began_at')->get();
+        return $modelClassName::whereNull('processing_finished_at')->whereNotNull('processing_began_at')->get();
     }
 }
 

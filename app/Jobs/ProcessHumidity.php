@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\HistoricalHumidityProcessingReportsModel;
-use App\Service\HistoricalWeatherHumidityService;
+use App\Service\ApiDataService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -33,8 +33,8 @@ class ProcessHumidity implements ShouldQueue
      *
      * @return void
      */
-    public function handle(HistoricalWeatherHumidityService $historicalWeatherHumidityService)
+    public function handle(ApiDataService $apiDataService)
     {
-        $historicalWeatherHumidityService->process($this->historicalHumidityProcessingReportsModel);
+        $apiDataService->process($this->historicalHumidityProcessingReportsModel);
     }
 }
