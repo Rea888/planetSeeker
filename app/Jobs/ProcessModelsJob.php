@@ -10,22 +10,21 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessHumidity implements ShouldQueue
+class ProcessModelsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
 
-    private HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel;
+    private string $modelClassName;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel)
+    public function __construct(string $modelClassName)
     {
-
-        $this->historicalHumidityProcessingReportsModel = $historicalHumidityProcessingReportsModel;
+        $this->modelClassName = $modelClassName;
     }
 
     /**
@@ -35,6 +34,6 @@ class ProcessHumidity implements ShouldQueue
      */
     public function handle(ApiDataService $apiDataService)
     {
-        $apiDataService->process($this->historicalHumidityProcessingReportsModel);
+        $apiDataService->process($this->modelClassName);
     }
 }

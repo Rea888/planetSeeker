@@ -22,10 +22,10 @@ class ModelProcessCommand extends Command
     protected $description = 'Process cities and dates since start date in config and save records into DB';
     private ModelProcessingService $modelProcessingService;
 
-    public function __construct(ModelProcessingService $historicalHumidityProcessingService)
+    public function __construct(ModelProcessingService $modelProcessingService)
     {
         parent::__construct();
-        $this->modelProcessingService = $historicalHumidityProcessingService;
+        $this->modelProcessingService = $modelProcessingService;
     }
 
 
