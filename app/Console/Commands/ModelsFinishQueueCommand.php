@@ -23,7 +23,7 @@ class ModelsFinishQueueCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'model:finishQue {$model}';
+    protected $signature = 'model:finishQue {model}{model2} {parameter}';
 
     /**
      * The console command description.
@@ -36,9 +36,11 @@ class ModelsFinishQueueCommand extends Command
     public function handle()
     {
         $modelClassName = $this->argument('model');
-        $unprocessedModels = $this->modelProcessingService->getUnprocessedModelsFinishedAt($modelClassName);
+        $modelClassName2 = $this->argument('model2');
+        $parameter = $this->argument('parameter');
+        $unprocessedModels = $this->modelProcessingService->getUnprocessedModelsWhereFinishedAtIsNull($modelClassName);
         foreach ($unprocessedModels as $unprocessedModel) {
-            $job = new ProcessModelsJob($unprocessedModel);
+            $job = new ProcessModelsJob($unprocessedModel, $modelClassName2, $parameter);
             dispatch($job);
         }
     }

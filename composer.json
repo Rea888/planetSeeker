@@ -7,11 +7,12 @@
     "require": {
         "php": "^8.2",
         "ext-curl": "*",
+        "ext-pdo": "*",
+        "doctrine/dbal": "^3.6",
         "guzzlehttp/guzzle": "^7.5",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
-        "laravel/tinker": "^2.7",
-        "ext-pdo": "*"
+        "laravel/tinker": "^2.7"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

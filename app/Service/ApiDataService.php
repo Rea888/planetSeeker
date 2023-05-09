@@ -2,11 +2,11 @@
 
 namespace App\Service;
 
-use App\Models\HistoricalHumidityProcessingReportsModel;
-use App\Models\HistoricalWeatherHumidityModel;
 use App\Repository\LongitudeLatitudeRepository;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ApiDataService
 {
@@ -33,14 +33,14 @@ class ApiDataService
         return $parsedResponse;
     }
 
-    public function processApiResponse(array $apiResponse, string $modelClassName): void
+    public function processApiResponse(array $apiResponse, string $modelClassName, string $parameter): void
     {
 
         $longitude = $apiResponse['longitude'];
         $latitude = $apiResponse['latitude'];
 
         foreach ($apiResponse['hourly']['time'] as $key => $dateTimeOfMeasurement) {
-            $parameter = $apiResponse['hourly'][$apiResponse['parameter']][$key];
+            $apiParameter = $apiResponse['hourly'][$parameter][$key];
 
             $modelClassName::updateOrCreate(
                 [
@@ -49,24 +49,25 @@ class ApiDataService
                     'date_time_of_measurement' => $dateTimeOfMeasurement,
                 ],
                 [
-                    $apiResponse['parameter'] => $parameter,
+                    $parameter => $apiParameter,
                 ]
             );
         }
     }
-    public function process(string $modelClassName): void
+    public function process(Model $unprocessedModel, string $modelClassName, string $parameter): void
     {
-        $modelClassName->processing_began_at = Carbon::now();
-        $modelClassName->save();
+        $unprocessedModel->processing_began_at = Carbon::now();
+        $unprocessedModel->save();
 
         $apiResponse = $this->getParametersFromApi(
-            $modelClassName->city,
-            $modelClassName->year,
-            $modelClassName->month,
-            $modelClassName->parameter);
-        $this->processApiResponse($apiResponse);
+            $unprocessedModel->city,
+            $unprocessedModel->year,
+            $unprocessedModel->month,
+            $parameter,
+        );
+        $this->processApiResponse($apiResponse, $modelClassName, $parameter);
 
-        $modelClassName->processing_finished_at = Carbon::now();
-        $modelClassName->save();
+        $unprocessedModel->processing_finished_at = Carbon::now();
+        $unprocessedModel->save();
     }
 }

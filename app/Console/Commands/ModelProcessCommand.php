@@ -13,7 +13,7 @@ class ModelProcessCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'modelProcess:save {$model}';
+    protected $signature = 'modelProcess:save {model}';
     /**
      * The console command description.
      *

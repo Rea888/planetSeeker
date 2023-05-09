@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Jobs\ProcessModelsJob;
 use App\Service\ModelProcessingService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class ModelsBeginQueueCommand extends Command
 {
@@ -24,7 +25,7 @@ class ModelsBeginQueueCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'humidity:beginQue {$model}';
+    protected $signature = 'model:beginQue {model} {model2} {parameter}';
 
     /**
      * The console command description.
@@ -37,9 +38,11 @@ class ModelsBeginQueueCommand extends Command
     public function handle()
     {
         $modelClassName = $this->argument('model');
-        $unprocessedHumidityModels = $this->modelProcessingService->getUnprocessedModelsBeganAt($modelClassName);
-        foreach ($unprocessedHumidityModels as $unprocessedHumidityModel) {
-            $job = new ProcessModelsJob($unprocessedHumidityModel);
+        $modelClassName2 = $this->argument('model2');
+        $parameter = $this->argument('parameter');
+        $unprocessedModels = $this->modelProcessingService->getUnprocessedModelsWhereBeganAtIsNull  ($modelClassName);
+        foreach ($unprocessedModels as $unprocessedModel) {
+            $job = new ProcessModelsJob($unprocessedModel, $modelClassName2, $parameter);
             dispatch($job);
         }
     }
