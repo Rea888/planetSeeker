@@ -2,29 +2,31 @@
 
 namespace App\Service;
 
+use App\ApiClient\Google\GoogleApiClient;
 use App\Repository\LongitudeLatitudeRepository;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class ApiWeatherClient
 {
 
-    protected $base_url;
-    private $longitudeLatitudeRepository;
+    private GoogleApiClient $googleApiClient;
+    protected string $base_url;
 
-    public function __construct($base_url, LongitudeLatitudeRepository $longitudeLatitudeRepository)
+    public function __construct(
+        GoogleApiClient $googleApiClient,
+        string          $base_url
+    )
     {
         $this->base_url = $base_url;
-        $this->longitudeLatitudeRepository = $longitudeLatitudeRepository;
-
+        $this->googleApiClient = $googleApiClient;
     }
 
 
     public function getParametersFromWeatherApi($cityName, $year, $month, $parameter)
     {
-        $latitudeAndLongitude = $this->longitudeLatitudeRepository->getLatitudeAndLongitude($cityName);
-        $latitude = $latitudeAndLongitude->getLatitude();
-        $longitude = $latitudeAndLongitude->getLongitude();
+        $coordinatesData = $this->googleApiClient->getCoordinatesForCity($cityName);
+        $latitude = $coordinatesData->getLatitude();
+        $longitude = $coordinatesData->getLongitude();
 
         $startDate = $year . '-' . $month . '-01';
         $endDate = date("Y-m-t", strtotime($startDate));
