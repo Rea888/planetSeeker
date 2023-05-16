@@ -16,19 +16,21 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $names = config('models_names.names');
+        $namesString = implode(' ', $names);
+        $group1 = config('parameters.group1');
+        $group1String = implode(' ',$group1);
+
         $schedule->command('weatherforecast:process')->dailyAt('01:00');
 
-        // Schedule humidityProcess:save to run monthly at a specific time, e.g., 01:00
-        $schedule->command('humidityProcess:save')->monthly()->dailyAt('01:00');
+        $schedule->command('modelProcess:save {$namesString}')->monthly()->dailyAt('01:05');
 
-        // Schedule humidity:beginQue to run monthly, 2 minutes after humidityProcess:save
-        $twoMinutesLater = Carbon::createFromTimeString('01:00')->addMinutes(2)->format('H:i');
-        $schedule->command('humidity:beginQue')->monthly()->dailyAt($twoMinutesLater);
+        $fiveMinutesLater = Carbon::createFromTimeString('01:05')->addMinutes(5)->format('H:i');
+        $schedule->command('model:beginQue {$group1String}')->monthly()->dailyAt($fiveMinutesLater);
 
-        // Schedule humidity:finishQue to run monthly, one hour after humidity:beginQue
-        $oneHourLater = Carbon::createFromTimeString($twoMinutesLater)->addHour()->format('H:i');
-        $schedule->command('humidity:finishQue')->monthly()->dailyAt($oneHourLater);
 
+        $oneHourLater = Carbon::createFromTimeString($fiveMinutesLater)->addHour()->format('H:i');
+        $schedule->command('model:finishQue {$group1String}')->monthly()->dailyAt($oneHourLater);
     }
 
     /**

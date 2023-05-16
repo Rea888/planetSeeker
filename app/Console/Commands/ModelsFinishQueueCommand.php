@@ -3,19 +3,18 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ProcessModelsJob;
-use App\Service\ModelProcessingService;
+use App\Service\ModelFromParameter;
 use Illuminate\Console\Command;
 
 class ModelsFinishQueueCommand extends Command
 {
 
-    private ModelProcessingService $modelProcessingService;
+    private ModelFromParameter $modelFromParameter;
 
-    public function __construct(ModelProcessingService $modelProcessingService)
+    public function __construct(ModelFromParameter $modelFromParameter)
     {
         parent::__construct();
-
-        $this->modelProcessingService = $modelProcessingService;
+        $this->modelFromParameter = $modelFromParameter;
     }
 
     /**
@@ -23,7 +22,7 @@ class ModelsFinishQueueCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'model:finishQue {model}{model2} {parameter}';
+    protected $signature = 'model:finishQue {parameters}';
 
     /**
      * The console command description.
@@ -35,13 +34,22 @@ class ModelsFinishQueueCommand extends Command
 
     public function handle()
     {
-        $modelClassName = $this->argument('model');
-        $modelClassName2 = $this->argument('model2');
-        $parameter = $this->argument('parameter');
-        $unprocessedModels = $this->modelProcessingService->getUnprocessedModelsWhereFinishedAtIsNull($modelClassName);
-        foreach ($unprocessedModels as $unprocessedModel) {
-            $job = new ProcessModelsJob($unprocessedModel, $modelClassName2, $parameter);
-            dispatch($job);
+        $groupName = $this->argument('parameters');
+        $parameters = config("parameters.$groupName");
+
+        if (is_null($parameters)) {
+            $this->error("Parameter group not found: $groupName");
+            return;
+        }
+
+        foreach ($parameters as $parameter) {
+            $unprocessedModelByParameter = $this->modelFromParameter->getUnprocessedModelByParameter(trim($parameter));
+            $unprocessedModels = $unprocessedModelByParameter->getUnprocessedModelsWhereFinishedAtIsNull();
+
+            foreach ($unprocessedModels as $unprocessedModel) {
+                $job = new ProcessModelsJob($unprocessedModel, $parameter);
+                dispatch($job);
+            }
         }
     }
 }

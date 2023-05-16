@@ -13,7 +13,7 @@ class ModelProcessCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'modelProcess:save {model}';
+    protected $signature = 'modelProcess:save {models_names}';
     /**
      * The console command description.
      *
@@ -31,7 +31,16 @@ class ModelProcessCommand extends Command
 
     public function handle()
     {
-        $modelClassName = $this->argument('model');
-        $this->modelProcessingService->saveModelProcessToDb($modelClassName);
+        $groupName = $this->argument('models_names');
+        $modelsNames = config("models_names.$groupName");
+
+        if (is_null($modelsNames)) {
+            $this->error("Parameter group not found: $groupName");
+            return;
+        }
+
+        foreach ($modelsNames as $modelsName) {
+            $this->modelProcessingService->saveModelProcessToDb($modelsName);
+        }
     }
 }

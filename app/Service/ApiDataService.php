@@ -2,46 +2,32 @@
 
 namespace App\Service;
 
-use App\Repository\LongitudeLatitudeRepository;
+use App\Contracts\Processable;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class ApiDataService
 {
 
-    private LongitudeLatitudeRepository $longitudeLatitudeRepository;
 
-    public function __construct(LongitudeLatitudeRepository $longitudeLatitudeRepository)
+    private ApiWeatherClient $apiWeatherClient;
+    private ModelFromParameter $modelFromParameter;
+
+    public function __construct(ApiWeatherClient $apiWeatherClient, ModelFromParameter $modelFromParameter)
     {
-        $this->longitudeLatitudeRepository = $longitudeLatitudeRepository;
+
+        $this->apiWeatherClient = $apiWeatherClient;
+        $this->modelFromParameter = $modelFromParameter;
     }
 
-    public function getParametersFromApi($cityName, $year, $month, $parameter): array
-    {
-        $latitudeAndLongitude = $this->longitudeLatitudeRepository->getLatitudeAndLongitude($cityName);
-        $latitude = $latitudeAndLongitude->getLatitude();
-        $longitude = $latitudeAndLongitude->getLongitude();
-
-        $startDate = $year . '-' . $month . '-01';
-        $endDate = date("Y-m-t", strtotime($startDate));
-
-        $apiResponse = Http::get(sprintf("https://archive-api.open-meteo.com/v1/archive?latitude=%s&longitude=%s&start_date=%s&end_date=%s&hourly=%s", $latitude, $longitude, $startDate, $endDate, $parameter));
-        $parsedResponse = json_decode($apiResponse, true);
-
-        return $parsedResponse;
-    }
-
-    public function processApiResponse(array $apiResponse, string $modelClassName, string $parameter): void
+    public function processApiResponse( $apiResponse, string $parameter): void
     {
 
-        $longitude = $apiResponse['longitude'];
-        $latitude = $apiResponse['latitude'];
+        $longitude = $apiResponse->getLongitude();
+        $latitude = $apiResponse->getLatitude();
 
-        foreach ($apiResponse['hourly']['time'] as $key => $dateTimeOfMeasurement) {
-            $apiParameter = $apiResponse['hourly'][$parameter][$key];
-
+        foreach ($apiResponse->getDateTimeOfMeasurement() as $key => $dateTimeOfMeasurement) {
+            $apiParameter = $apiResponse->getParameter($parameter)[$key];
+            $modelClassName =$this->modelFromParameter->getProcessedModelByParameter($parameter);
             $modelClassName::updateOrCreate(
                 [
                     'longitude' => $longitude,
@@ -54,18 +40,19 @@ class ApiDataService
             );
         }
     }
-    public function process(Model $unprocessedModel, string $modelClassName, string $parameter): void
+    public function process(Processable $processableModel, $parameter): void
     {
+        $unprocessedModel = $processableModel;
         $unprocessedModel->processing_began_at = Carbon::now();
         $unprocessedModel->save();
 
-        $apiResponse = $this->getParametersFromApi(
+        $apiResponse = $this->apiWeatherClient->getParametersFromWeatherApi(
             $unprocessedModel->city,
             $unprocessedModel->year,
             $unprocessedModel->month,
-            $parameter,
+            $parameter
         );
-        $this->processApiResponse($apiResponse, $modelClassName, $parameter);
+        $this->processApiResponse($apiResponse, $parameter);
 
         $unprocessedModel->processing_finished_at = Carbon::now();
         $unprocessedModel->save();

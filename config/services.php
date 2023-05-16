@@ -34,4 +34,8 @@ return [
     'google' => [
         'key' => env('GOOGLE_KEY'),
     ],
+
+    'weather_api' => [
+        'base_url' => env('WEATHER_API_BASE_URL'),
+    ],
 ];

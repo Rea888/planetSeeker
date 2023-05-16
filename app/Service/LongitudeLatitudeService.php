@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Data\CoordinatesData;
+use Illuminate\Support\Facades\Log;
 
 class LongitudeLatitudeService
 {

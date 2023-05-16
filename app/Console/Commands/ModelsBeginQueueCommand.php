@@ -3,21 +3,19 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ProcessModelsJob;
-use App\Service\ModelProcessingService;
+use App\Service\ModelFromParameter;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
 class ModelsBeginQueueCommand extends Command
 {
 
 
-    private ModelProcessingService $modelProcessingService;
+    private ModelFromParameter $modelFromParameter;
 
-    public function __construct(ModelProcessingService $modelProcessingService)
+    public function __construct(ModelFromParameter $modelFromParameter)
     {
         parent::__construct();
-
-        $this->modelProcessingService = $modelProcessingService;
+        $this->modelFromParameter = $modelFromParameter;
     }
 
     /**
@@ -25,7 +23,7 @@ class ModelsBeginQueueCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'model:beginQue {model} {model2} {parameter}';
+    protected $signature = 'model:beginQue {parameters}';
 
     /**
      * The console command description.
@@ -37,13 +35,22 @@ class ModelsBeginQueueCommand extends Command
 
     public function handle()
     {
-        $modelClassName = $this->argument('model');
-        $modelClassName2 = $this->argument('model2');
-        $parameter = $this->argument('parameter');
-        $unprocessedModels = $this->modelProcessingService->getUnprocessedModelsWhereBeganAtIsNull  ($modelClassName);
-        foreach ($unprocessedModels as $unprocessedModel) {
-            $job = new ProcessModelsJob($unprocessedModel, $modelClassName2, $parameter);
-            dispatch($job);
+        $groupName = $this->argument('parameters');
+        $parameters = config("parameters.$groupName");
+
+        if (is_null($parameters)) {
+            $this->error("Parameter group not found: $groupName");
+            return;
+        }
+
+        foreach ($parameters as $parameter) {
+            $unprocessedModelByParameter = $this->modelFromParameter->getUnprocessedModelByParameter(trim($parameter));
+            $unprocessedModels = $unprocessedModelByParameter->getUnprocessedModelsWhereBeganAtIsNull();
+
+            foreach ($unprocessedModels as $unprocessedModel) {
+                $job = new ProcessModelsJob($unprocessedModel, $parameter);
+                dispatch($job);
+            }
         }
     }
 }

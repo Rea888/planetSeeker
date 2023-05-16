@@ -33,14 +33,5 @@ class ModelProcessingService
         }
     }
 
-    public function getUnprocessedModelsWhereBeganAtIsNull(string $modelClassName)
-    {
-        return $modelClassName::where('processing_began_at', null)->get();
-    }
-
-    public function getUnprocessedModelsWhereFinishedAtIsNull(string $modelClassName)
-    {
-        return $modelClassName::whereNull('processing_finished_at')->whereNotNull('processing_began_at')->get();
-    }
 }
 
