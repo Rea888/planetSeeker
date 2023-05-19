@@ -33,5 +33,10 @@ return [
 
     'google' => [
         'key' => env('GOOGLE_KEY'),
+        'base_url' => env('GOOGLE_API_BASE_URL') ?? 'https://maps.googleapis.com/maps/api/geocode/json?',
+    ],
+
+    'weather_api' => [
+        'base_url' => env('WEATHER_API_BASE_URL'),
     ],
 ];

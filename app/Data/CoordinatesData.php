@@ -21,5 +21,4 @@ class CoordinatesData
     {
         return $this->latitude;
     }
-
 }

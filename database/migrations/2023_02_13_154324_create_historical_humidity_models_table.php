@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('historical_weather_humidity_models', function (Blueprint $table) {
+        Schema::create('historical_humidity_models', function (Blueprint $table) {
             $table->id();
             $table->decimal('latitude', 14, 10);
             $table->decimal('longitude', 14, 10);
             $table->dateTime('date_time_of_measurement');
-            $table->integer('relative_humidity_2m');
+            $table->integer('relativehumidity_2m')->nullable();
             $table->timestamps();
 
-            $table->unique(['latitude', 'longitude', 'date_time_of_measurement'], 'place_time_unique');
+            $table->unique(['latitude', 'longitude', 'date_time_of_measurement'], 'place_time_unique_humidity');
         });
     }
 

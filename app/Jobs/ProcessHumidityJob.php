@@ -3,29 +3,29 @@
 namespace App\Jobs;
 
 use App\Models\HistoricalHumidityProcessingReportsModel;
-use App\Service\HistoricalWeatherHumidityService;
+use App\Service\Humidity\ProcessedHumidityService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessHumidity implements ShouldQueue
+class ProcessHumidityJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-
     private HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel;
+    private string $parameter;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel)
+    public function __construct(HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel, string $parameter)
     {
-
         $this->historicalHumidityProcessingReportsModel = $historicalHumidityProcessingReportsModel;
+        $this->parameter = $parameter;
     }
 
     /**
@@ -33,8 +33,8 @@ class ProcessHumidity implements ShouldQueue
      *
      * @return void
      */
-    public function handle(HistoricalWeatherHumidityService $historicalWeatherHumidityService)
+    public function handle(ProcessedHumidityService $processedHumidityService)
     {
-        $historicalWeatherHumidityService->process($this->historicalHumidityProcessingReportsModel);
+        $processedHumidityService->process($this->historicalHumidityProcessingReportsModel, $this->parameter);
     }
 }
