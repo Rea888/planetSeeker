@@ -9,7 +9,6 @@
         "ext-curl": "*",
         "ext-http": "*",
         "ext-pdo": "*",
-        "arcanedev/log-viewer": "@dev",
         "elasticsearch/elasticsearch": "^8.7",
         "guzzlehttp/guzzle": "^7.5",
         "laravel/framework": "^9.19",
