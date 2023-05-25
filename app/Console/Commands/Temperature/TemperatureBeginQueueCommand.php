@@ -21,7 +21,7 @@ class TemperatureBeginQueueCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'temperature:beginQue {parameter}';
+    protected $signature = 'temperature:beginQue';
 
     /**
      * The console command description.
@@ -33,10 +33,9 @@ class TemperatureBeginQueueCommand extends Command
 
     public function handle()
     {
-        $parameter = $this->argument('parameter');
         $unprocessedHumidityModels = $this->historicalTemperatureProcessingReportsModel->getUnprocessedModelsWhereBeganAtIsNull();
         foreach ($unprocessedHumidityModels as $unprocessedHumidityModel) {
-            $job = new ProcessTemperatureJob($unprocessedHumidityModel, $parameter);
+            $job = new ProcessTemperatureJob($unprocessedHumidityModel);
             dispatch($job);
         }
     }

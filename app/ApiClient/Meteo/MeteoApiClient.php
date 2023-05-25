@@ -53,7 +53,6 @@ class MeteoApiClient
         $preparedQueryParams['hourly'] = self::HOURLY_PARAM_VALUE_HUMIDITY;
 
         $apiResponse = Http::get($this->getFormattedBaseUrl(), $preparedQueryParams);
-
         $apiResponse->throw();
 
         return $this->humidityDataMapper->map($apiResponse);
@@ -78,7 +77,6 @@ class MeteoApiClient
         if (str_ends_with($this->baseUrl, '?')) {
             return $this->baseUrl;
         }
-
         return $this->baseUrl . '?';
     }
 }

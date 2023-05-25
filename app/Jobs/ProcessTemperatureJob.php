@@ -14,8 +14,6 @@ class ProcessTemperatureJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-
-    private string $parameter;
     private HistoricalTemperatureProcessingReportsModel $historicalTemperatureProcessingReportsModel;
 
     /**
@@ -23,10 +21,8 @@ class ProcessTemperatureJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(HistoricalTemperatureProcessingReportsModel $historicalTemperatureProcessingReportsModel, string $parameter)
+    public function __construct(HistoricalTemperatureProcessingReportsModel $historicalTemperatureProcessingReportsModel)
     {
-
-        $this->parameter = $parameter;
         $this->historicalTemperatureProcessingReportsModel = $historicalTemperatureProcessingReportsModel;
     }
 
@@ -37,6 +33,6 @@ class ProcessTemperatureJob implements ShouldQueue
      */
     public function handle(ProcessedTemperatureService $processedHumidityService)
     {
-        $processedHumidityService->process($this->historicalTemperatureProcessingReportsModel, $this->parameter);
+        $processedHumidityService->process($this->historicalTemperatureProcessingReportsModel);
     }
 }

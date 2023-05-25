@@ -9,7 +9,6 @@ use App\Models\HistoricalTemperatureModel;
 use App\Models\HistoricalTemperatureProcessingReportsModel;
 use Carbon\Carbon;
 use DateTime;
-use Exception;
 
 class ProcessedTemperatureService
 {
@@ -47,7 +46,7 @@ class ProcessedTemperatureService
         }
     }
 
-    public function process(HistoricalTemperatureProcessingReportsModel $historicalTemperaturesProcessingReportsModel, $parameter): void
+    public function process(HistoricalTemperatureProcessingReportsModel $historicalTemperaturesProcessingReportsModel): void
     {
         $historicalTemperaturesProcessingReportsModel->processing_began_at = Carbon::now();
         $historicalTemperaturesProcessingReportsModel->save();
@@ -58,12 +57,9 @@ class ProcessedTemperatureService
         $endDate = new DateTime(date("Y-m-t", strtotime($startDate)));
         $endDate = $endDate->format('Y-m-d');
 
-        if ($parameter === MeteoApiClient::HOURLY_PARAM_VALUE_TEMPERATURE) {
-            $data = $this->meteoApiClient->getTemperatureData($startDate, $endDate, $coordinatesData);
-            $this->saveProcessedTemperatureToDB($data);
-        } else {
-            throw new Exception("Unknown parameter: $parameter");
-        }
+        $data = $this->meteoApiClient->getTemperatureData($startDate, $endDate, $coordinatesData);
+        $this->saveProcessedTemperatureToDB($data);
+
         $historicalTemperaturesProcessingReportsModel->processing_finished_at = Carbon::now();
         $historicalTemperaturesProcessingReportsModel->save();
     }

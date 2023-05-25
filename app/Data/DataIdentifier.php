@@ -2,11 +2,11 @@
 
 namespace App\Data;
 
-use DateTime;
+use DateTimeImmutable;
 
 class DataIdentifier
 {
-    public function __construct(private readonly string   $city, private readonly DateTime $dateTime)
+    public function __construct(private readonly string   $city, private readonly DateTimeImmutable $dateTime)
     {
     }
 
@@ -15,7 +15,7 @@ class DataIdentifier
         return $this->city;
     }
 
-    public function getDateTime(): DateTime
+    public function getDateTime(): DateTimeImmutable
     {
         return $this->dateTime;
     }

@@ -22,7 +22,7 @@ class TemperatureFinishQueueCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'temperature:finishQue {parameter}';
+    protected $signature = 'temperature:finishQue';
 
     /**
      * The console command description.
@@ -34,10 +34,9 @@ class TemperatureFinishQueueCommand extends Command
 
     public function handle()
     {
-        $parameter = $this->argument('parameter');
         $unprocessedTemperatureModles = $this->historicalTemperatureProcessingReportsModel->getUnprocessedModelsWhereFinishedAtIsNull();
         foreach ($unprocessedTemperatureModles as $unprocessedTemperatureModel) {
-            $job = new ProcessTemperatureJob($unprocessedTemperatureModel, $parameter);
+            $job = new ProcessTemperatureJob($unprocessedTemperatureModel);
             dispatch($job);
         }
     }

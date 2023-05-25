@@ -15,8 +15,8 @@ class BeginQueueAllModelsCommand extends Command
 
     public function handle()
     {
-        $this->call(TemperatureBeginQueueCommand::class, ['parameter' => 'temperature_2m']);
-        $this->call(HumidityBeginQueueCommand::class,  ['parameter' => 'relativehumidity_2m']);
+        $this->call(TemperatureBeginQueueCommand::class);
+        $this->call(HumidityBeginQueueCommand::class);
     }
 }
 

@@ -14,7 +14,7 @@ class FinishQueueAllModelsCommand extends Command
 
     public function handle()
     {
-        $this->call(TemperatureFinishQueueCommand::class, ['parameter' => 'temperature_2m']);
-        $this->call(HumidityFinishQueueCommand::class,  ['parameter' => 'relativehumidity_2m']);
+        $this->call(TemperatureFinishQueueCommand::class);
+        $this->call(HumidityFinishQueueCommand::class);
     }
 }

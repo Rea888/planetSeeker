@@ -15,17 +15,17 @@ class ProcessHumidityJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel;
-    private string $parameter;
+
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel, string $parameter)
+    public function __construct(HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel)
     {
         $this->historicalHumidityProcessingReportsModel = $historicalHumidityProcessingReportsModel;
-        $this->parameter = $parameter;
+
     }
 
     /**
@@ -35,6 +35,6 @@ class ProcessHumidityJob implements ShouldQueue
      */
     public function handle(ProcessedHumidityService $processedHumidityService)
     {
-        $processedHumidityService->process($this->historicalHumidityProcessingReportsModel, $this->parameter);
+        $processedHumidityService->process($this->historicalHumidityProcessingReportsModel);
     }
 }

@@ -4,27 +4,27 @@ namespace App\Console\Commands;
 
 use App\Data\DataIdentifier;
 use DateInterval;
-use DateTime;
+
+use DateTimeImmutable;
 use Illuminate\Console\Command;
 
-class AbstractInitializeCommand extends Command
+abstract class AbstractInitializeCommand extends Command
 {
-
-    protected $signature = 'abstract:initialize';
-    protected function getCitiesAndDates()
+    protected function getCitiesAndDates(): array
     {
         $citiesAndDates = [];
+        $dateDelayOneMonth = new DateInterval('P1M');
 
-        $startDate = new DateTime(config('city_date.start_date'));
-        $today = new DateTime();
+        $startDate = new DateTimeImmutable(config('city_date.start_date'));
+        $today = new DateTimeImmutable();
         $todayMinusOneMonth = $today->modify('-1 month');
         $cities = config('city_date.city');
 
         while ($startDate < $todayMinusOneMonth) {
             foreach ($cities as $city) {
-                $citiesAndDates[] = new DataIdentifier($city, clone $startDate);
+                $citiesAndDates[] = new DataIdentifier($city, $startDate);
             }
-            $startDate = $startDate->add(new DateInterval('P1M'));
+            $startDate = $startDate->add($dateDelayOneMonth);
         }
         return $citiesAndDates;
     }

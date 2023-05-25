@@ -9,7 +9,6 @@ use App\Models\HistoricalHumidityModel;
 use App\Models\HistoricalHumidityProcessingReportsModel;
 use Carbon\Carbon;
 use DateTime;
-use Exception;
 
 class ProcessedHumidityService
 {
@@ -24,14 +23,14 @@ class ProcessedHumidityService
 
     }
 
-    public function saveProcessedHumidityToDB(HumidityData $humidityData)
+    public function saveProcessedHumidityToDB(HumidityData $humidityData): void
     {
         $latitude = $humidityData->getLatitude();
         $longitude = $humidityData->getLongitude();
         $dates = $humidityData->getDateTimeOfMeasurement();
         $humidities = $humidityData->getHumidityMeasurementData();
 
-        foreach ($dates as $key => $date){
+        foreach ($dates as $key => $date) {
             $humidity = $humidities[$key];
             HistoricalHumidityModel::updateOrCreate(
                 [
@@ -46,7 +45,7 @@ class ProcessedHumidityService
         }
     }
 
-    public function process(HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel, $parameter): void
+    public function process(HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel): void
     {
         $historicalHumidityProcessingReportsModel->processing_began_at = Carbon::now();
         $historicalHumidityProcessingReportsModel->save();
@@ -57,12 +56,9 @@ class ProcessedHumidityService
         $endDate = new DateTime(date("Y-m-t", strtotime($startDate)));
         $endDate = $endDate->format('Y-m-d');
 
-        if ($parameter === MeteoApiClient::HOURLY_PARAM_VALUE_HUMIDITY) {
-            $data = $this->meteoApiClient->getHumidityData($startDate, $endDate, $coordinatesData);
-            $this->saveProcessedHumidityToDB($data);
-        } else {
-            throw new Exception("Unknown parameter: $parameter");
-        }
+        $data = $this->meteoApiClient->getHumidityData($startDate, $endDate, $coordinatesData);
+        $this->saveProcessedHumidityToDB($data);
+
         $historicalHumidityProcessingReportsModel->processing_finished_at = Carbon::now();
         $historicalHumidityProcessingReportsModel->save();
     }

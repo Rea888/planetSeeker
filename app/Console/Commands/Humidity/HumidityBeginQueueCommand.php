@@ -22,7 +22,7 @@ class HumidityBeginQueueCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'humidity:beginQue {parameter}';
+    protected $signature = 'humidity:beginQue';
 
     /**
      * The console command description.
@@ -34,10 +34,9 @@ class HumidityBeginQueueCommand extends Command
 
     public function handle()
     {
-        $parameter = $this->argument('parameter');
         $unprocessedHumidityModels = $this->historicalHumidityProcessingReportsModel->getUnprocessedModelsWhereBeganAtIsNull();
         foreach ($unprocessedHumidityModels as $unprocessedHumidityModel) {
-            $job = new ProcessHumidityJob($unprocessedHumidityModel, $parameter);
+            $job = new ProcessHumidityJob($unprocessedHumidityModel);
             dispatch($job);
         }
     }
