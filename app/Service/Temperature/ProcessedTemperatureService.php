@@ -32,15 +32,16 @@ class ProcessedTemperatureService
         $dates = $humidityData->getDateTimeOfMeasurement();
         $temperatures = $humidityData->getTemperatureMeasurementData();
 
-        for ($i = 0; $i < count($dates); $i++) {
+        foreach ($dates as $key => $date) {
+            $temperature = $temperatures[$key];
             HistoricalTemperatureModel::updateOrCreate(
                 [
                     'latitude' => $latitude,
                     'longitude' => $longitude,
-                    'date_time_of_measurement' => $dates[$i],
+                    'date_time_of_measurement' => $date,
                 ],
                 [
-                    MeteoApiClient::HOURLY_PARAM_VALUE_TEMPERATURE => $temperatures[$i],
+                    MeteoApiClient::HOURLY_PARAM_VALUE_TEMPERATURE => $temperature,
                 ]
             );
         }

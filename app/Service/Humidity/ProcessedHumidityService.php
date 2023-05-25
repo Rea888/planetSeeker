@@ -13,7 +13,6 @@ use Exception;
 
 class ProcessedHumidityService
 {
-
     private GoogleApiClient $googleApiClient;
     private MeteoApiClient $meteoApiClient;
 
@@ -32,15 +31,16 @@ class ProcessedHumidityService
         $dates = $humidityData->getDateTimeOfMeasurement();
         $humidities = $humidityData->getHumidityMeasurementData();
 
-        for ($i = 0; $i < count($dates); $i++) {
+        foreach ($dates as $key => $date){
+            $humidity = $humidities[$key];
             HistoricalHumidityModel::updateOrCreate(
                 [
                     'latitude' => $latitude,
                     'longitude' => $longitude,
-                    'date_time_of_measurement' => $dates[$i],
+                    'date_time_of_measurement' => $date,
                 ],
                 [
-                    MeteoApiClient::HOURLY_PARAM_VALUE_HUMIDITY => $humidities[$i],
+                    MeteoApiClient::HOURLY_PARAM_VALUE_HUMIDITY => $humidity,
                 ]
             );
         }
