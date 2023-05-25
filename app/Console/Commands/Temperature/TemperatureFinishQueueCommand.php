@@ -34,8 +34,8 @@ class TemperatureFinishQueueCommand extends Command
 
     public function handle()
     {
-        $unprocessedTemperatureModles = $this->historicalTemperatureProcessingReportsModel->getUnprocessedModelsWhereFinishedAtIsNull();
-        foreach ($unprocessedTemperatureModles as $unprocessedTemperatureModel) {
+        $unprocessedTemperatureModels = $this->historicalTemperatureProcessingReportsModel->getUnprocessedModelsWhereFinishedAtIsNull();
+        foreach ($unprocessedTemperatureModels as $unprocessedTemperatureModel) {
             $job = new ProcessTemperatureJob($unprocessedTemperatureModel);
             dispatch($job);
         }

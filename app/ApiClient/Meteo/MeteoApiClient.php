@@ -49,7 +49,6 @@ class MeteoApiClient
     ): HumidityData
     {
         $preparedQueryParams = $this->prepareQueryParams($startDate, $endDate, $coordinatesData);
-
         $preparedQueryParams['hourly'] = self::HOURLY_PARAM_VALUE_HUMIDITY;
 
         $apiResponse = Http::get($this->getFormattedBaseUrl(), $preparedQueryParams);
