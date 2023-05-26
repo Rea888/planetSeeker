@@ -5,6 +5,7 @@ namespace App\ApiClient\Meteo;
 use App\Data\CoordinatesData;
 use App\Data\Meteo\Humidity\HumidityData;
 use App\Data\Meteo\Temperature\TemperatureData;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 
 class MeteoApiClient
@@ -27,6 +28,9 @@ class MeteoApiClient
         $this->humidityDataMapper = $humidityDataMapper;
     }
 
+    /**
+     * @throws RequestException
+     */
     public function getTemperatureData(
         string        $startDate,
         string        $endDate,
@@ -42,6 +46,9 @@ class MeteoApiClient
         return $this->temperatureDataMapper->map($apiResponse);
     }
 
+    /**
+     * @throws RequestException
+     */
     public function getHumidityData(
         string       $startDate,
         string        $endDate,

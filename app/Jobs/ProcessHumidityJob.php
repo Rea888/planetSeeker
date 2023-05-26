@@ -31,9 +31,10 @@ class ProcessHumidityJob implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param ProcessedHumidityService $processedHumidityService
      * @return void
      */
-    public function handle(ProcessedHumidityService $processedHumidityService)
+    public function handle(ProcessedHumidityService $processedHumidityService): void
     {
         $processedHumidityService->process($this->historicalHumidityProcessingReportsModel);
     }

@@ -29,9 +29,10 @@ class ProcessTemperatureJob implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param ProcessedTemperatureService $processedHumidityService
      * @return void
      */
-    public function handle(ProcessedTemperatureService $processedHumidityService)
+    public function handle(ProcessedTemperatureService $processedHumidityService): void
     {
         $processedHumidityService->process($this->historicalTemperatureProcessingReportsModel);
     }

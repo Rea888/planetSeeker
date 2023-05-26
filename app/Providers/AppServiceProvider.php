@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->bind(GoogleApiClient::class, function ($app) {
             return new GoogleApiClient(
@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
 //        DB::listen(function ($query) {
 //            Log::info(

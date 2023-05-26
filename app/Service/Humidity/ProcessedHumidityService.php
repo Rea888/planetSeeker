@@ -7,8 +7,9 @@ use App\ApiClient\Meteo\MeteoApiClient;
 use App\Data\Meteo\Humidity\HumidityData;
 use App\Models\HistoricalHumidityModel;
 use App\Models\HistoricalHumidityProcessingReportsModel;
-use Carbon\Carbon;
 use DateTime;
+use Exception;
+use Illuminate\Http\Client\RequestException;
 
 class ProcessedHumidityService
 {
@@ -45,6 +46,10 @@ class ProcessedHumidityService
         }
     }
 
+    /**
+     * @throws RequestException
+     * @throws Exception
+     */
     public function process(HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel): void
     {
         $historicalHumidityProcessingReportsModel->startProcessing();

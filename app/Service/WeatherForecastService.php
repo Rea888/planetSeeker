@@ -24,8 +24,6 @@ class WeatherForecastService
                     'temperature' => $temperature
                 ]
             );
-
-
         }
     }
 }

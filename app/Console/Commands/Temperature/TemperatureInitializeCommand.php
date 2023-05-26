@@ -4,6 +4,7 @@ namespace App\Console\Commands\Temperature;
 
 use App\Console\Commands\AbstractInitializeCommand;
 use App\Service\Temperature\TemperatureProcessingService;
+use Exception;
 
 class TemperatureInitializeCommand extends AbstractInitializeCommand
 {
@@ -20,7 +21,7 @@ class TemperatureInitializeCommand extends AbstractInitializeCommand
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle()
     {

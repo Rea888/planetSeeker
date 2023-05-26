@@ -3,6 +3,9 @@
 namespace App\Console\Commands;
 
 use Elastic\Elasticsearch\Client;
+use Elastic\Elasticsearch\Exception\ClientResponseException;
+use Elastic\Elasticsearch\Exception\MissingParameterException;
+use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Illuminate\Console\Command;
 
 class ElasticLogSetup extends Command
@@ -10,7 +13,7 @@ class ElasticLogSetup extends Command
     /**
      * @var Client
      */
-    protected $client;
+    protected Client $client;
 
     /**
      * The name and signature of the console command.
@@ -38,6 +41,11 @@ class ElasticLogSetup extends Command
     }
 
 
+    /**
+     * @throws ClientResponseException
+     * @throws ServerResponseException
+     * @throws MissingParameterException
+     */
     public function handle()
     {
         $index = rtrim(config('elastic_log.suffix'), '_') . '_' . config('elastic_log.index');

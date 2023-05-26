@@ -6,10 +6,14 @@ use App\Data\DataIdentifier;
 use DateInterval;
 
 use DateTimeImmutable;
+use Exception;
 use Illuminate\Console\Command;
 
 abstract class AbstractInitializeCommand extends Command
 {
+    /**
+     * @throws Exception
+     */
     protected function getCitiesAndDates(): array
     {
         $citiesAndDates = [];

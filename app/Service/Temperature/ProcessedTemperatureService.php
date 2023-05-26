@@ -8,6 +8,8 @@ use App\Data\Meteo\Temperature\TemperatureData;
 use App\Models\HistoricalTemperatureModel;
 use App\Models\HistoricalTemperatureProcessingReportsModel;
 use DateTime;
+use Exception;
+use Illuminate\Http\Client\RequestException;
 
 class ProcessedTemperatureService
 {
@@ -23,7 +25,7 @@ class ProcessedTemperatureService
 
     }
 
-    public function saveProcessedTemperatureToDB(TemperatureData $humidityData)
+    public function saveProcessedTemperatureToDB(TemperatureData $humidityData): void
     {
         $latitude = $humidityData->getLatitude();
         $longitude = $humidityData->getLongitude();
@@ -45,6 +47,10 @@ class ProcessedTemperatureService
         }
     }
 
+    /**
+     * @throws RequestException
+     * @throws Exception
+     */
     public function process(HistoricalTemperatureProcessingReportsModel $historicalTemperaturesProcessingReportsModel): void
     {
         $historicalTemperaturesProcessingReportsModel->startProcessing();
