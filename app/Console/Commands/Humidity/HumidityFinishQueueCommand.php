@@ -8,21 +8,12 @@ use Illuminate\Console\Command;
 
 class HumidityFinishQueueCommand extends Command
 {
-
-    private HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel;
-
-    public function __construct(HistoricalHumidityProcessingReportsModel $historicalTemperatureProcessingReportsModel)
-    {
-        parent::__construct();
-        $this->historicalHumidityProcessingReportsModel = $historicalTemperatureProcessingReportsModel;
-    }
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'humidity:finishQue';
+    protected $signature = 'humidity:finishQueue';
 
     /**
      * The console command description.
@@ -35,7 +26,7 @@ class HumidityFinishQueueCommand extends Command
     public function handle()
     {
 
-        $unprocessedHumidityModels = $this->historicalHumidityProcessingReportsModel->getUnprocessedModelsWhereFinishedAtIsNull();
+        $unprocessedHumidityModels = HistoricalHumidityProcessingReportsModel::where('processing_finished_at', null)->get();
         foreach ($unprocessedHumidityModels as $unprocessedHumidityModel) {
             $job = new ProcessHumidityJob($unprocessedHumidityModel);
             dispatch($job);

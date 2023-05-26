@@ -4,9 +4,6 @@ namespace App\Console\Commands\Forecast;
 
 use App\Http\Controllers\WeatherForecastController;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 
 class WeatherForecastCommand extends Command
 {

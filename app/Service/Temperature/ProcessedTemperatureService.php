@@ -7,7 +7,6 @@ use App\ApiClient\Meteo\MeteoApiClient;
 use App\Data\Meteo\Temperature\TemperatureData;
 use App\Models\HistoricalTemperatureModel;
 use App\Models\HistoricalTemperatureProcessingReportsModel;
-use Carbon\Carbon;
 use DateTime;
 
 class ProcessedTemperatureService
@@ -48,8 +47,7 @@ class ProcessedTemperatureService
 
     public function process(HistoricalTemperatureProcessingReportsModel $historicalTemperaturesProcessingReportsModel): void
     {
-        $historicalTemperaturesProcessingReportsModel->processing_began_at = Carbon::now();
-        $historicalTemperaturesProcessingReportsModel->save();
+        $historicalTemperaturesProcessingReportsModel->startProcessing();
 
         $coordinatesData = $this->googleApiClient->getCoordinatesForCity($historicalTemperaturesProcessingReportsModel->city);
         $startDate = new DateTime($historicalTemperaturesProcessingReportsModel->year . '-' . $historicalTemperaturesProcessingReportsModel->month . '-01');
@@ -60,7 +58,6 @@ class ProcessedTemperatureService
         $data = $this->meteoApiClient->getTemperatureData($startDate, $endDate, $coordinatesData);
         $this->saveProcessedTemperatureToDB($data);
 
-        $historicalTemperaturesProcessingReportsModel->processing_finished_at = Carbon::now();
-        $historicalTemperaturesProcessingReportsModel->save();
+        $historicalTemperaturesProcessingReportsModel->finishProcessing();
     }
 }

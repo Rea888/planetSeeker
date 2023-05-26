@@ -8,21 +8,12 @@ use Illuminate\Console\Command;
 
 class TemperatureFinishQueueCommand extends Command
 {
-
-    private HistoricalTemperatureProcessingReportsModel $historicalTemperatureProcessingReportsModel;
-
-    public function __construct(HistoricalTemperatureProcessingReportsModel $historicalTemperatureProcessingReportsModel)
-    {
-        parent::__construct();
-        $this->historicalTemperatureProcessingReportsModel = $historicalTemperatureProcessingReportsModel;
-    }
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'temperature:finishQue';
+    protected $signature = 'temperature:finishQueue';
 
     /**
      * The console command description.
@@ -34,7 +25,7 @@ class TemperatureFinishQueueCommand extends Command
 
     public function handle()
     {
-        $unprocessedTemperatureModels = $this->historicalTemperatureProcessingReportsModel->getUnprocessedModelsWhereFinishedAtIsNull();
+        $unprocessedTemperatureModels = HistoricalTemperatureProcessingReportsModel::where('processing_finished_at', null)->get();
         foreach ($unprocessedTemperatureModels as $unprocessedTemperatureModel) {
             $job = new ProcessTemperatureJob($unprocessedTemperatureModel);
             dispatch($job);

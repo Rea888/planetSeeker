@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 
 class BeginQueueAllModelsCommand extends Command
 {
-    protected $signature = 'models:beginQue';
+    protected $signature = 'models:beginQueue';
 
     protected $description = 'Find models with null value at processing_began_at and give them to a job to save its historical_* database';
 

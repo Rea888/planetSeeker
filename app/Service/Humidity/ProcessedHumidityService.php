@@ -47,8 +47,7 @@ class ProcessedHumidityService
 
     public function process(HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel): void
     {
-        $historicalHumidityProcessingReportsModel->processing_began_at = Carbon::now();
-        $historicalHumidityProcessingReportsModel->save();
+        $historicalHumidityProcessingReportsModel->startProcessing();
 
         $coordinatesData = $this->googleApiClient->getCoordinatesForCity($historicalHumidityProcessingReportsModel->city);
         $startDate = new DateTime($historicalHumidityProcessingReportsModel->year . '-' . $historicalHumidityProcessingReportsModel->month . '-01');
@@ -59,7 +58,6 @@ class ProcessedHumidityService
         $data = $this->meteoApiClient->getHumidityData($startDate, $endDate, $coordinatesData);
         $this->saveProcessedHumidityToDB($data);
 
-        $historicalHumidityProcessingReportsModel->processing_finished_at = Carbon::now();
-        $historicalHumidityProcessingReportsModel->save();
+        $historicalHumidityProcessingReportsModel->finishProcessing();
     }
 }
