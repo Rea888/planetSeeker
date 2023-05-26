@@ -15,7 +15,7 @@ class ElasticLogProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
@@ -25,7 +25,7 @@ class ElasticLogProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $index = rtrim(config('elastic_log.suffix'), '_') . '_' . config('elastic_log.index');
         $type = config('elastic_log.type');
