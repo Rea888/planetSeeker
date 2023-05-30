@@ -4,6 +4,7 @@ namespace App\ApiClient\Meteo;
 
 use App\Data\CoordinatesData;
 use App\Data\Meteo\Humidity\HumidityData;
+use App\Data\Meteo\Surface_Pressure\SurfacePressureData;
 use App\Data\Meteo\Temperature\TemperatureData;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
@@ -12,20 +13,25 @@ class MeteoApiClient
 {
     public const HOURLY_PARAM_VALUE_TEMPERATURE = 'temperature_2m';
     public const HOURLY_PARAM_VALUE_HUMIDITY = 'relativehumidity_2m';
+    public const HOURLY_PARAM_VALUE_SURFACE_PRESSURE = 'surface_pressure';
+
     private TemperatureDataMapper $temperatureDataMapper;
     private HumidityDataMapper $humidityDataMapper;
+    private SurfacePressureDataMapper $surfacePressureDataMapper;
 
     private string $baseUrl;
 
     public function __construct(
         TemperatureDataMapper $temperatureDataMapper,
         HumidityDataMapper    $humidityDataMapper,
+        SurfacePressureDataMapper $surfacePressureDataMapper,
         string                $baseUrl
     )
     {
         $this->baseUrl = $baseUrl;
         $this->temperatureDataMapper = $temperatureDataMapper;
         $this->humidityDataMapper = $humidityDataMapper;
+        $this->surfacePressureDataMapper = $surfacePressureDataMapper;
     }
 
     /**
@@ -51,7 +57,7 @@ class MeteoApiClient
      */
     public function getHumidityData(
         string       $startDate,
-        string        $endDate,
+        string       $endDate,
         CoordinatesData $coordinatesData
     ): HumidityData
     {
@@ -62,6 +68,21 @@ class MeteoApiClient
         $apiResponse->throw();
 
         return $this->humidityDataMapper->map($apiResponse);
+    }
+
+    public function getSurfacePressureData(
+        string      $startDate,
+        string      $endDate,
+        CoordinatesData $coordinatesData
+    ): SurfacePressureData
+    {
+        $preparedQueryParams = $this->prepareQueryParams($startDate, $endDate, $coordinatesData);
+        $preparedQueryParams['hourly'] = self::HOURLY_PARAM_VALUE_SURFACE_PRESSURE;
+
+        $apiResponse = Http::get($this->getFormattedBaseUrl(), $preparedQueryParams);
+        $apiResponse->throw();
+
+        return $this->surfacePressureDataMapper->map($apiResponse);
     }
 
     private function prepareQueryParams(

@@ -4,6 +4,7 @@ namespace App\Console\Commands\Humidity;
 
 use App\Console\Commands\AbstractInitializeCommand;
 use App\Service\Humidity\HumidityProcessingService;
+use Exception;
 
 class HumidityInitializeCommand extends AbstractInitializeCommand
 {
@@ -13,12 +14,15 @@ class HumidityInitializeCommand extends AbstractInitializeCommand
 
     private HumidityProcessingService $humidityProcessingService;
 
-    public function __construct(HumidityProcessingService $temperatureProcessingService)
+    public function __construct(HumidityProcessingService $humidityProcessingService)
     {
         parent::__construct();
-        $this->humidityProcessingService = $temperatureProcessingService;
+        $this->humidityProcessingService = $humidityProcessingService;
     }
 
+    /**
+     * @throws Exception
+     */
     public function handle()
     {
         $dataIdentifiers = $this->getCitiesAndDates();

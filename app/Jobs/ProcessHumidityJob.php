@@ -25,7 +25,6 @@ class ProcessHumidityJob implements ShouldQueue
     public function __construct(HistoricalHumidityProcessingReportsModel $historicalHumidityProcessingReportsModel)
     {
         $this->historicalHumidityProcessingReportsModel = $historicalHumidityProcessingReportsModel;
-
     }
 
     /**

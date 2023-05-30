@@ -7,7 +7,6 @@ use App\Data\Meteo\AbstractMeteoData;
 
 class HumidityData extends AbstractMeteoData
 {
-
     private mixed $humidityMeasurementData;
 
     public function __construct(CoordinatesData $coordinatesData, array $dateTimeOfMeasurement, mixed $humidityMeasurementData)

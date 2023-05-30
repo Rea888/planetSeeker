@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Service\Temperature;
+namespace App\Service\Surface_Pressure;
 
 use App\Data\DataIdentifier;
-use App\Models\HistoricalTemperatureProcessingReportsModel;
+use App\Models\HistoricalSurfacePressureProcessingReportsModel;
 use App\Service\AbstractProcessingService;
 
-class TemperatureProcessingService extends AbstractProcessingService
+class SurfacePressureProcessingService extends AbstractProcessingService
 {
-
     public function initialize(DataIdentifier $dataIdentifier)
     {
-        HistoricalTemperatureProcessingReportsModel::firstOrCreate(
+        HistoricalSurfacePressureProcessingReportsModel::firstOrCreate(
             $this->getModelBasicData($dataIdentifier->getDateTime(), $dataIdentifier->getCity()));
     }
 }

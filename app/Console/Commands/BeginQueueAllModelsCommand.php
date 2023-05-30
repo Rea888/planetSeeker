@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Console\Commands\Humidity\HumidityBeginQueueCommand;
+use App\Console\Commands\Surface_Pressure\SurfacePressureBeginQueueCommand;
 use App\Console\Commands\Temperature\TemperatureBeginQueueCommand;
 use Illuminate\Console\Command;
 
@@ -17,6 +18,7 @@ class BeginQueueAllModelsCommand extends Command
     {
         $this->call(TemperatureBeginQueueCommand::class);
         $this->call(HumidityBeginQueueCommand::class);
+        $this->call(SurfacePressureBeginQueueCommand::class);
     }
 }
 
