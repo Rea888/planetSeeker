@@ -43,6 +43,7 @@ return [
 
     'debug' => (bool) env('APP_DEBUG', false),
 
+
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -143,6 +144,7 @@ return [
         // 'store'  => 'redis',
     ],
 
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -194,6 +196,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\ElasticLogProvider::class,
 
     ],
 

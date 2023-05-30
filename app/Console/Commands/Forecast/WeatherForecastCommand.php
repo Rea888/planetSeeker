@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Forecast;
 
 use App\Http\Controllers\WeatherForecastController;
 use Illuminate\Console\Command;
 
 class WeatherForecastCommand extends Command
 {
-
-
     private WeatherForecastController $weatherForecastController;
 
     public function __construct(WeatherForecastController $weatherForecastController)
@@ -28,7 +26,7 @@ class WeatherForecastCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Save weather forecast temperature to DB';
 
     /**
      * Execute the console command.

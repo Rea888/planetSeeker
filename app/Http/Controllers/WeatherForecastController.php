@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repository\LongitudeLatitudeRepository;
+use App\ApiClient\Google\GoogleApiClient;
 use App\Service\WeatherForecastService;
 use Illuminate\Support\Facades\Http;
 
@@ -10,13 +10,13 @@ class WeatherForecastController extends Controller
 {
 
     private WeatherForecastService $weatherForecastService;
-    private LongitudeLatitudeRepository $longitudeLatitudeRepository;
+    private GoogleApiClient $googleApiClient;
 
-    public function __construct(WeatherForecastService $weatherForecastService, LongitudeLatitudeRepository $longitudeLatitudeRepository)
+    public function __construct(WeatherForecastService $weatherForecastService, GoogleApiClient $googleApiClient)
     {
 
         $this->weatherForecastService = $weatherForecastService;
-        $this->longitudeLatitudeRepository = $longitudeLatitudeRepository;
+        $this->googleApiClient = $googleApiClient;
     }
 
 
@@ -24,9 +24,9 @@ class WeatherForecastController extends Controller
     public function getWeatherForecastWeather(string $cityName)
     {
 
-        $latitudeAndLongitude = $this->longitudeLatitudeRepository->getLatitudeAndLongitude($cityName);
-        $latitude = $latitudeAndLongitude->getLatitude();
-        $longitude = $latitudeAndLongitude->getLongitude();
+        $coordinatesData = $this->googleApiClient->getCoordinatesForCity($cityName);
+        $latitude = $coordinatesData->getLatitude();
+        $longitude = $coordinatesData->getLongitude();
 
         $get_data = Http::get('https://api.open-meteo.com/v1/forecast?latitude=' . $latitude . '&longitude=' . $longitude . '&hourly=temperature_2m');
         $response = json_decode($get_data, true);

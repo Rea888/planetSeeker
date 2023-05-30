@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use App\ApiClient\Google\CoordinatesDataMapper;
+use App\ApiClient\Google\GoogleApiClient;
+use App\ApiClient\Meteo\HumidityDataMapper;
+use App\ApiClient\Meteo\MeteoApiClient;
+use App\ApiClient\Meteo\TemperatureDataMapper;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,9 +16,23 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        //
+        $this->app->bind(GoogleApiClient::class, function ($app) {
+            return new GoogleApiClient(
+                $app->make(CoordinatesDataMapper::class),
+                config('services.google.base_url'),
+                config('services.google.key')
+            );
+        });
+
+        $this->app->bind(MeteoApiClient::class, function ($app) {
+            return new MeteoApiClient(
+                $app->make(TemperatureDataMapper::class),
+                $app->make(HumidityDataMapper::class),
+                config('services.weather_api.base_url')
+            );
+        });
     }
 
     /**
@@ -23,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
 //        DB::listen(function ($query) {
 //            Log::info(

@@ -18,6 +18,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/save', [HistoricalHumidityProcessingService::class, 'saveHumidityProcessToDb']);
+
+
+
+
 
 

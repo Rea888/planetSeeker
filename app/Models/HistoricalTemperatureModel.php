@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class WeatherForecastModel extends Model
+class HistoricalTemperatureModel extends Model
 {
     protected $fillable = [
         'latitude',
         'longitude',
         'date_time_of_measurement',
-        'temperature',
+        'temperature_2m',
     ];
 }

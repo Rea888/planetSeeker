@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-
-class HistoricalHumidityProcessingReportsModel extends AbstractProcessingReportsModel
+class HistoricalTemperatureProcessingReportsModel extends AbstractProcessingReportsModel
 {
     protected $fillable = [
         'year',
