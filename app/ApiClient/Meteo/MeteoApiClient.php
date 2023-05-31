@@ -14,6 +14,7 @@ class MeteoApiClient
     public const HOURLY_PARAM_VALUE_TEMPERATURE = 'temperature_2m';
     public const HOURLY_PARAM_VALUE_HUMIDITY = 'relativehumidity_2m';
     public const HOURLY_PARAM_VALUE_SURFACE_PRESSURE = 'surface_pressure';
+    public const HOURLY_PARAM_VALUE_SNOWFALL = 'snowfall';
 
     private TemperatureDataMapper $temperatureDataMapper;
     private HumidityDataMapper $humidityDataMapper;
