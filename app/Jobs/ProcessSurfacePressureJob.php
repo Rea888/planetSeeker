@@ -14,7 +14,7 @@ class ProcessSurfacePressureJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private HistoricalSurfacePressureProcessingReportsModel $historicalSurfacePressureProcessingRepostsModel;
+    private HistoricalSurfacePressureProcessingReportsModel $historicalSurfacePressureProcessingReportsModel;
 
 
     /**
@@ -24,7 +24,7 @@ class ProcessSurfacePressureJob implements ShouldQueue
      */
     public function __construct(HistoricalSurfacePressureProcessingReportsModel $historicalSurfacePressureProcessingRepostsModel)
     {
-        $this->historicalSurfacePressureProcessingRepostsModel = $historicalSurfacePressureProcessingRepostsModel;
+        $this->historicalSurfacePressureProcessingReportsModel = $historicalSurfacePressureProcessingRepostsModel;
     }
 
     /**
@@ -35,6 +35,6 @@ class ProcessSurfacePressureJob implements ShouldQueue
      */
     public function handle(ProcessedSurfacePressureService $processedSurfacePressureService): void
     {
-        $processedSurfacePressureService->process($this->historicalSurfacePressureProcessingRepostsModel);
+        $processedSurfacePressureService->process($this->historicalSurfacePressureProcessingReportsModel);
     }
 }

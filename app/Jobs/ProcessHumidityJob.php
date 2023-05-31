@@ -7,6 +7,7 @@ use App\Service\Humidity\ProcessedHumidityService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
@@ -32,6 +33,7 @@ class ProcessHumidityJob implements ShouldQueue
      *
      * @param ProcessedHumidityService $processedHumidityService
      * @return void
+     * @throws RequestException
      */
     public function handle(ProcessedHumidityService $processedHumidityService): void
     {
