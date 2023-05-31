@@ -7,6 +7,7 @@ use App\Service\Temperature\ProcessedTemperatureService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
@@ -31,6 +32,7 @@ class ProcessTemperatureJob implements ShouldQueue
      *
      * @param ProcessedTemperatureService $processedHumidityService
      * @return void
+     * @throws RequestException
      */
     public function handle(ProcessedTemperatureService $processedHumidityService): void
     {
