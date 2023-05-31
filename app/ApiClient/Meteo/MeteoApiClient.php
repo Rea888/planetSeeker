@@ -4,6 +4,7 @@ namespace App\ApiClient\Meteo;
 
 use App\Data\CoordinatesData;
 use App\Data\Meteo\Humidity\HumidityData;
+use App\Data\Meteo\Snowfall\SnowfallData;
 use App\Data\Meteo\Surface_Pressure\SurfacePressureData;
 use App\Data\Meteo\Temperature\TemperatureData;
 use Illuminate\Http\Client\RequestException;
@@ -19,13 +20,14 @@ class MeteoApiClient
     private TemperatureDataMapper $temperatureDataMapper;
     private HumidityDataMapper $humidityDataMapper;
     private SurfacePressureDataMapper $surfacePressureDataMapper;
-
+    private SnowfallDataMapper $snowfallDataMapper;
     private string $baseUrl;
 
     public function __construct(
         TemperatureDataMapper $temperatureDataMapper,
         HumidityDataMapper    $humidityDataMapper,
         SurfacePressureDataMapper $surfacePressureDataMapper,
+        SnowfallDataMapper    $snowfallDataMapper,
         string                $baseUrl
     )
     {
@@ -33,6 +35,7 @@ class MeteoApiClient
         $this->temperatureDataMapper = $temperatureDataMapper;
         $this->humidityDataMapper = $humidityDataMapper;
         $this->surfacePressureDataMapper = $surfacePressureDataMapper;
+        $this->snowfallDataMapper = $snowfallDataMapper;
     }
 
     /**
@@ -84,6 +87,21 @@ class MeteoApiClient
         $apiResponse->throw();
 
         return $this->surfacePressureDataMapper->map($apiResponse);
+    }
+
+    public function getSnowfallData(
+        string      $startDate,
+        string      $endDate,
+        CoordinatesData $coordinatesData
+    ): SnowfallData
+    {
+        $preparedQueryParams = $this->prepareQueryParams($startDate, $endDate, $coordinatesData);
+        $preparedQueryParams['hourly'] = self::HOURLY_PARAM_VALUE_SNOWFALL;
+
+        $apiResponse = Http::get($this->getFormattedBaseUrl(), $preparedQueryParams);
+        $apiResponse->throw();
+
+        return $this->snowfallDataMapper->map($apiResponse);
     }
 
     private function prepareQueryParams(
