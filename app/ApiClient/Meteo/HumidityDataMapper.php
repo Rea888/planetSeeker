@@ -5,6 +5,7 @@ namespace App\ApiClient\Meteo;
 use App\Data\Meteo\Humidity\HumidityData;
 use Illuminate\Http\Client\Response;
 
+
 class HumidityDataMapper extends AbstractMeteoDataMapper
 {
     public function map(Response $response): HumidityData

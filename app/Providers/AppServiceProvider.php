@@ -6,6 +6,7 @@ use App\ApiClient\Google\CoordinatesDataMapper;
 use App\ApiClient\Google\GoogleApiClient;
 use App\ApiClient\Meteo\HumidityDataMapper;
 use App\ApiClient\Meteo\MeteoApiClient;
+use App\ApiClient\Meteo\SurfacePressureDataMapper;
 use App\ApiClient\Meteo\TemperatureDataMapper;
 use Illuminate\Support\ServiceProvider;
 
@@ -30,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
             return new MeteoApiClient(
                 $app->make(TemperatureDataMapper::class),
                 $app->make(HumidityDataMapper::class),
+                $app->make(SurfacePressureDataMapper::class),
                 config('services.weather_api.base_url')
             );
         });
