@@ -3,6 +3,7 @@
 namespace App\ApiClient\Meteo;
 
 use App\Data\CoordinatesData;
+use App\Data\Meteo\Cloudcover\CloudcoverData;
 use App\Data\Meteo\Humidity\HumidityData;
 use App\Data\Meteo\Surface_Pressure\SurfacePressureData;
 use App\Data\Meteo\Temperature\TemperatureData;
@@ -14,17 +15,19 @@ class MeteoApiClient
     public const HOURLY_PARAM_VALUE_TEMPERATURE = 'temperature_2m';
     public const HOURLY_PARAM_VALUE_HUMIDITY = 'relativehumidity_2m';
     public const HOURLY_PARAM_VALUE_SURFACE_PRESSURE = 'surface_pressure';
+    public const HOURLY_PARAM_VALUE_CLOUDCOVER = 'cloudcover';
 
     private TemperatureDataMapper $temperatureDataMapper;
     private HumidityDataMapper $humidityDataMapper;
     private SurfacePressureDataMapper $surfacePressureDataMapper;
-
+    private CloudcoverDataMapper $cloudcoverDataMapper;
     private string $baseUrl;
 
     public function __construct(
         TemperatureDataMapper $temperatureDataMapper,
         HumidityDataMapper    $humidityDataMapper,
         SurfacePressureDataMapper $surfacePressureDataMapper,
+        CloudcoverDataMapper  $cloudcoverDataMapper,
         string                $baseUrl
     )
     {
@@ -32,6 +35,7 @@ class MeteoApiClient
         $this->temperatureDataMapper = $temperatureDataMapper;
         $this->humidityDataMapper = $humidityDataMapper;
         $this->surfacePressureDataMapper = $surfacePressureDataMapper;
+        $this->cloudcoverDataMapper = $cloudcoverDataMapper;
     }
 
     /**
@@ -70,6 +74,9 @@ class MeteoApiClient
         return $this->humidityDataMapper->map($apiResponse);
     }
 
+    /**
+     * @throws RequestException
+     */
     public function getSurfacePressureData(
         string      $startDate,
         string      $endDate,
@@ -83,6 +90,24 @@ class MeteoApiClient
         $apiResponse->throw();
 
         return $this->surfacePressureDataMapper->map($apiResponse);
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function getCloudcoverData(
+        string      $startDate,
+        string      $endDate,
+        CoordinatesData $coordinatesData
+    ): CloudcoverData
+    {
+        $preparedQueryParams = $this->prepareQueryParams($startDate, $endDate, $coordinatesData);
+        $preparedQueryParams['hourly'] = self::HOURLY_PARAM_VALUE_CLOUDCOVER;
+
+        $apiResponse = Http::get($this->getFormattedBaseUrl(), $preparedQueryParams);
+        $apiResponse->throw();
+
+        return $this->cloudcoverDataMapper->map($apiResponse);
     }
 
     private function prepareQueryParams(
