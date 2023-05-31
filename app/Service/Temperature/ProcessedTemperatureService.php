@@ -25,12 +25,12 @@ class ProcessedTemperatureService
 
     }
 
-    public function saveProcessedTemperatureToDB(TemperatureData $humidityData): void
+    public function saveProcessedTemperatureToDB(TemperatureData $temperatureData): void
     {
-        $latitude = $humidityData->getLatitude();
-        $longitude = $humidityData->getLongitude();
-        $dates = $humidityData->getDateTimeOfMeasurement();
-        $temperatures = $humidityData->getTemperatureMeasurementData();
+        $latitude = $temperatureData->getLatitude();
+        $longitude = $temperatureData->getLongitude();
+        $dates = $temperatureData->getDateTimeOfMeasurement();
+        $temperatures = $temperatureData->getTemperatureMeasurementData();
 
         foreach ($dates as $key => $date) {
             $temperature = $temperatures[$key];
