@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Cloudcover\CloudcoverInitializeCommand;
 use App\Console\Commands\Humidity\HumidityInitializeCommand;
 use App\Console\Commands\Surface_Pressure\SurfacePressureInitializeCommand;
 use App\Console\Commands\Temperature\TemperatureInitializeCommand;
@@ -17,5 +18,6 @@ class InitializeAllModelsCommand extends Command
         $this->call(TemperatureInitializeCommand::class);
         $this->call(HumidityInitializeCommand::class);
         $this->call(SurfacePressureInitializeCommand::class);
+        $this->call(CloudcoverInitializeCommand::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Cloudcover\CloudcoverFinishQueueCommand;
 use App\Console\Commands\Humidity\HumidityFinishQueueCommand;
 use App\Console\Commands\Surface_Pressure\SurfacePressureFinishQueueCommand;
 use App\Console\Commands\Temperature\TemperatureFinishQueueCommand;
@@ -18,5 +19,6 @@ class FinishQueueAllModelsCommand extends Command
         $this->call(TemperatureFinishQueueCommand::class);
         $this->call(HumidityFinishQueueCommand::class);
         $this->call(SurfacePressureFinishQueueCommand::class);
+        $this->call(CloudcoverFinishQueueCommand::class);
     }
 }
