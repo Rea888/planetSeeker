@@ -5,6 +5,7 @@ namespace App\ApiClient\Meteo;
 use App\Data\CoordinatesData;
 use App\Data\Meteo\Cloudcover\CloudcoverData;
 use App\Data\Meteo\Humidity\HumidityData;
+use App\Data\Meteo\Shortwave_Radiation\ShortwaveRadiationData;
 use App\Data\Meteo\Surface_Pressure\SurfacePressureData;
 use App\Data\Meteo\Temperature\TemperatureData;
 use Illuminate\Http\Client\RequestException;
@@ -16,11 +17,13 @@ class MeteoApiClient
     public const HOURLY_PARAM_VALUE_HUMIDITY = 'relativehumidity_2m';
     public const HOURLY_PARAM_VALUE_SURFACE_PRESSURE = 'surface_pressure';
     public const HOURLY_PARAM_VALUE_CLOUDCOVER = 'cloudcover';
+    public const HOURLY_PARAM_VALUE_SHORTWAVE_RADIATION = 'shortwave_radiation';
 
     private TemperatureDataMapper $temperatureDataMapper;
     private HumidityDataMapper $humidityDataMapper;
     private SurfacePressureDataMapper $surfacePressureDataMapper;
     private CloudcoverDataMapper $cloudcoverDataMapper;
+    private ShortwaveRadiationDataMapper $shortwaveRadiationDataMapper;
     private string $baseUrl;
 
     public function __construct(
@@ -28,6 +31,7 @@ class MeteoApiClient
         HumidityDataMapper    $humidityDataMapper,
         SurfacePressureDataMapper $surfacePressureDataMapper,
         CloudcoverDataMapper  $cloudcoverDataMapper,
+        ShortwaveRadiationDataMapper $shortwaveRadiationDataMapper,
         string                $baseUrl
     )
     {
@@ -36,6 +40,7 @@ class MeteoApiClient
         $this->humidityDataMapper = $humidityDataMapper;
         $this->surfacePressureDataMapper = $surfacePressureDataMapper;
         $this->cloudcoverDataMapper = $cloudcoverDataMapper;
+        $this->shortwaveRadiationDataMapper = $shortwaveRadiationDataMapper;
     }
 
     /**
@@ -108,6 +113,24 @@ class MeteoApiClient
         $apiResponse->throw();
 
         return $this->cloudcoverDataMapper->map($apiResponse);
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function getShortwaveRadiationData(
+        string      $startDate,
+        string      $endDate,
+        CoordinatesData $coordinatesData
+    ): ShortwaveRadiationData
+    {
+        $preparedQueryParams = $this->prepareQueryParams($startDate, $endDate, $coordinatesData);
+        $preparedQueryParams['hourly'] = self::HOURLY_PARAM_VALUE_SHORTWAVE_RADIATION;
+
+        $apiResponse = Http::get($this->getFormattedBaseUrl(), $preparedQueryParams);
+        $apiResponse->throw();
+
+        return $this->shortwaveRadiationDataMapper->map($apiResponse);
     }
 
     private function prepareQueryParams(

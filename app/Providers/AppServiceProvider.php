@@ -34,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
                 $app->make(HumidityDataMapper::class),
                 $app->make(SurfacePressureDataMapper::class),
                 $app->make(CloudcoverDataMapper::class),
+                $app->make(SurfacePressureDataMapper::class),
                 config('services.weather_api.base_url')
             );
         });
