@@ -7,6 +7,7 @@ use App\Console\Commands\Humidity\HumidityBeginQueueCommand;
 use App\Console\Commands\Shortwave_Radiation\ShortwaveRadiationBeginQueueCommand;
 use App\Console\Commands\Surface_Pressure\SurfacePressureBeginQueueCommand;
 use App\Console\Commands\Temperature\TemperatureBeginQueueCommand;
+use App\Console\Commands\Windspeed\WindspeedBeginQueueCommand;
 use Illuminate\Console\Command;
 
 
@@ -23,6 +24,7 @@ class BeginQueueAllModelsCommand extends Command
         $this->call(SurfacePressureBeginQueueCommand::class);
         $this->call(CloudcoverBeginQueueCommand::class);
         $this->call(ShortwaveRadiationBeginQueueCommand::class);
+        $this->call(WindspeedBeginQueueCommand::class);
     }
 }
 

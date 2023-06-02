@@ -7,6 +7,7 @@ use App\Console\Commands\Humidity\HumidityFinishQueueCommand;
 use App\Console\Commands\Shortwave_Radiation\ShortwaveRadiationFinishQueueCommand;
 use App\Console\Commands\Surface_Pressure\SurfacePressureFinishQueueCommand;
 use App\Console\Commands\Temperature\TemperatureFinishQueueCommand;
+use App\Console\Commands\Windspeed\WindspeedFinishQueueCommand;
 use Illuminate\Console\Command;
 
 class FinishQueueAllModelsCommand extends Command
@@ -22,5 +23,6 @@ class FinishQueueAllModelsCommand extends Command
         $this->call(SurfacePressureFinishQueueCommand::class);
         $this->call(CloudcoverFinishQueueCommand::class);
         $this->call(ShortwaveRadiationFinishQueueCommand::class);
+        $this->call(WindspeedFinishQueueCommand::class);
     }
 }
