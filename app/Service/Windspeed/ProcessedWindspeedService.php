@@ -6,7 +6,7 @@ use App\ApiClient\Google\GoogleApiClient;
 use App\ApiClient\Meteo\MeteoApiClient;
 use App\Data\Meteo\Windspeed\WindspeedData;
 use App\Models\HistoricalWindspeedModel;
-use App\Models\HistoricalWindspeedModelProcessingReportsModel;
+use App\Models\HistoricalWindspeedProcessingReportsModel;
 use DateTime;
 use Exception;
 
@@ -47,7 +47,7 @@ class ProcessedWindspeedService
     /**
      * @throws Exception
      */
-    public function process(HistoricalWindspeedModelProcessingReportsModel $historicalWindspeedModelProcessingReportsModel): void
+    public function process(HistoricalWindspeedProcessingReportsModel $historicalWindspeedModelProcessingReportsModel): void
     {
         $historicalWindspeedModelProcessingReportsModel->startProcessing();
 

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class HistoricalWindspeedModelProcessingReportsModel extends AbstractProcessingReportsModel
+class HistoricalWindspeedProcessingReportsModel extends AbstractProcessingReportsModel
 {
     protected $fillable = [
         'year',

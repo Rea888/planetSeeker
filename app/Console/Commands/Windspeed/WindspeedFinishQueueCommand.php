@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Windspeed;
 
 use App\Jobs\ProcessWindspeedJob;
-use App\Models\HistoricalWindspeedModelProcessingReportsModel;
+use App\Models\HistoricalWindspeedProcessingReportsModel;
 use Illuminate\Console\Command;
 
 class WindspeedFinishQueueCommand extends Command
@@ -25,7 +25,7 @@ class WindspeedFinishQueueCommand extends Command
 
     public function handle()
     {
-        $unprocessedWindspeedModels = HistoricalWindspeedModelProcessingReportsModel::where('processing_finished_at', null)->get();
+        $unprocessedWindspeedModels = HistoricalWindspeedProcessingReportsModel::where('processing_finished_at', null)->get();
         foreach ($unprocessedWindspeedModels as $unprocessedWindspeedModel){
             $job = new ProcessWindspeedJob($unprocessedWindspeedModel);
             dispatch($job);

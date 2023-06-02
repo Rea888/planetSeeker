@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\HistoricalWindspeedModelProcessingReportsModel;
+use App\Models\HistoricalWindspeedProcessingReportsModel;
 use App\Service\Windspeed\ProcessedWindspeedService;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -15,14 +15,14 @@ class ProcessWindspeedJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private HistoricalWindspeedModelProcessingReportsModel $historicalWindspeedModelProcessingReportsModel;
+    private HistoricalWindspeedProcessingReportsModel $historicalWindspeedModelProcessingReportsModel;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(HistoricalWindspeedModelProcessingReportsModel $historicalWindspeedModelProcessingReportsModel)
+    public function __construct(HistoricalWindspeedProcessingReportsModel $historicalWindspeedModelProcessingReportsModel)
     {
         //
         $this->historicalWindspeedModelProcessingReportsModel = $historicalWindspeedModelProcessingReportsModel;
