@@ -8,6 +8,7 @@ use App\Data\Meteo\Humidity\HumidityData;
 use App\Data\Meteo\Shortwave_Radiation\ShortwaveRadiationData;
 use App\Data\Meteo\Surface_Pressure\SurfacePressureData;
 use App\Data\Meteo\Temperature\TemperatureData;
+use App\Data\Meteo\Windspeed\WindspeedData;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 
@@ -18,37 +19,41 @@ class MeteoApiClient
     public const HOURLY_PARAM_VALUE_SURFACE_PRESSURE = 'surface_pressure';
     public const HOURLY_PARAM_VALUE_CLOUDCOVER = 'cloudcover';
     public const HOURLY_PARAM_VALUE_SHORTWAVE_RADIATION = 'shortwave_radiation';
+    public const HOURLY_PARAM_VALUE_WINDSPEED = 'windspeed_10m';
 
     private TemperatureDataMapper $temperatureDataMapper;
     private HumidityDataMapper $humidityDataMapper;
     private SurfacePressureDataMapper $surfacePressureDataMapper;
     private CloudcoverDataMapper $cloudcoverDataMapper;
     private ShortwaveRadiationDataMapper $shortwaveRadiationDataMapper;
+    private WindspeedDataMapper $windspeedDataMapper;
     private string $baseUrl;
 
     public function __construct(
-        TemperatureDataMapper $temperatureDataMapper,
-        HumidityDataMapper    $humidityDataMapper,
-        SurfacePressureDataMapper $surfacePressureDataMapper,
-        CloudcoverDataMapper  $cloudcoverDataMapper,
+        TemperatureDataMapper        $temperatureDataMapper,
+        HumidityDataMapper           $humidityDataMapper,
+        SurfacePressureDataMapper    $surfacePressureDataMapper,
+        CloudcoverDataMapper         $cloudcoverDataMapper,
         ShortwaveRadiationDataMapper $shortwaveRadiationDataMapper,
-        string                $baseUrl
+        WindspeedDataMapper          $windspeedDataMapper,
+        string                       $baseUrl
     )
     {
-        $this->baseUrl = $baseUrl;
         $this->temperatureDataMapper = $temperatureDataMapper;
         $this->humidityDataMapper = $humidityDataMapper;
         $this->surfacePressureDataMapper = $surfacePressureDataMapper;
         $this->cloudcoverDataMapper = $cloudcoverDataMapper;
         $this->shortwaveRadiationDataMapper = $shortwaveRadiationDataMapper;
+        $this->windspeedDataMapper = $windspeedDataMapper;
+        $this->baseUrl = $baseUrl;
     }
 
     /**
      * @throws RequestException
      */
     public function getTemperatureData(
-        string        $startDate,
-        string        $endDate,
+        string          $startDate,
+        string          $endDate,
         CoordinatesData $coordinatesData
     ): TemperatureData
     {
@@ -65,8 +70,8 @@ class MeteoApiClient
      * @throws RequestException
      */
     public function getHumidityData(
-        string       $startDate,
-        string       $endDate,
+        string          $startDate,
+        string          $endDate,
         CoordinatesData $coordinatesData
     ): HumidityData
     {
@@ -83,8 +88,8 @@ class MeteoApiClient
      * @throws RequestException
      */
     public function getSurfacePressureData(
-        string      $startDate,
-        string      $endDate,
+        string          $startDate,
+        string          $endDate,
         CoordinatesData $coordinatesData
     ): SurfacePressureData
     {
@@ -101,8 +106,8 @@ class MeteoApiClient
      * @throws RequestException
      */
     public function getCloudcoverData(
-        string      $startDate,
-        string      $endDate,
+        string          $startDate,
+        string          $endDate,
         CoordinatesData $coordinatesData
     ): CloudcoverData
     {
@@ -119,8 +124,8 @@ class MeteoApiClient
      * @throws RequestException
      */
     public function getShortwaveRadiationData(
-        string      $startDate,
-        string      $endDate,
+        string          $startDate,
+        string          $endDate,
         CoordinatesData $coordinatesData
     ): ShortwaveRadiationData
     {
@@ -133,9 +138,27 @@ class MeteoApiClient
         return $this->shortwaveRadiationDataMapper->map($apiResponse);
     }
 
+    /**
+     * @throws RequestException
+     */
+    public function getWindspeedData(
+        string          $startDate,
+        string          $endDate,
+        CoordinatesData $coordinatesData
+    ): WindspeedData
+    {
+        $preparedQueryParams = $this->prepareQueryParams($startDate, $endDate, $coordinatesData);
+        $preparedQueryParams['hourly'] = self::HOURLY_PARAM_VALUE_WINDSPEED;
+
+        $apiResponse = Http::get($this->getFormattedBaseUrl(), $preparedQueryParams);
+        $apiResponse->throw();
+
+        return $this->windspeedDataMapper->map($apiResponse);
+    }
+
     private function prepareQueryParams(
-        string        $startDate,
-        string        $endDate,
+        string          $startDate,
+        string          $endDate,
         CoordinatesData $coordinatesData
     ): array
     {
