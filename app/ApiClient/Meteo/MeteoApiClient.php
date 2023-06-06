@@ -5,6 +5,8 @@ namespace App\ApiClient\Meteo;
 use App\Data\CoordinatesData;
 use App\Data\Meteo\Cloudcover\CloudcoverData;
 use App\Data\Meteo\Humidity\HumidityData;
+use App\Data\Meteo\Snowfall\SnowfallData;
+use App\Data\Meteo\Rain\RainData;
 use App\Data\Meteo\Surface_Pressure\SurfacePressureData;
 use App\Data\Meteo\Temperature\TemperatureData;
 use Illuminate\Http\Client\RequestException;
@@ -15,11 +17,16 @@ class MeteoApiClient
     public const HOURLY_PARAM_VALUE_TEMPERATURE = 'temperature_2m';
     public const HOURLY_PARAM_VALUE_HUMIDITY = 'relativehumidity_2m';
     public const HOURLY_PARAM_VALUE_SURFACE_PRESSURE = 'surface_pressure';
+    public const HOURLY_PARAM_VALUE_RAIN = 'rain';
+
+    public const HOURLY_PARAM_VALUE_SNOWFALL = 'snowfall';
     public const HOURLY_PARAM_VALUE_CLOUDCOVER = 'cloudcover';
 
     private TemperatureDataMapper $temperatureDataMapper;
     private HumidityDataMapper $humidityDataMapper;
     private SurfacePressureDataMapper $surfacePressureDataMapper;
+    private RainDataMapper $rainDataMapper;
+    private SnowfallDataMapper $snowfallDataMapper;
     private CloudcoverDataMapper $cloudcoverDataMapper;
     private string $baseUrl;
 
@@ -27,6 +34,8 @@ class MeteoApiClient
         TemperatureDataMapper $temperatureDataMapper,
         HumidityDataMapper    $humidityDataMapper,
         SurfacePressureDataMapper $surfacePressureDataMapper,
+        RainDataMapper        $rainDataMapper,
+        SnowfallDataMapper    $snowfallDataMapper,
         CloudcoverDataMapper  $cloudcoverDataMapper,
         string                $baseUrl
     )
@@ -35,6 +44,8 @@ class MeteoApiClient
         $this->temperatureDataMapper = $temperatureDataMapper;
         $this->humidityDataMapper = $humidityDataMapper;
         $this->surfacePressureDataMapper = $surfacePressureDataMapper;
+        $this->rainDataMapper = $rainDataMapper;
+        $this->snowfallDataMapper = $snowfallDataMapper;
         $this->cloudcoverDataMapper = $cloudcoverDataMapper;
     }
 
@@ -90,6 +101,42 @@ class MeteoApiClient
         $apiResponse->throw();
 
         return $this->surfacePressureDataMapper->map($apiResponse);
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function getRainData(
+        string      $startDate,
+        string      $endDate,
+        CoordinatesData $coordinatesData
+    ): RainData
+    {
+        $preparedQueryParams = $this->prepareQueryParams($startDate, $endDate, $coordinatesData);
+        $preparedQueryParams['hourly'] = self::HOURLY_PARAM_VALUE_RAIN;
+
+        $apiResponse = Http::get($this->getFormattedBaseUrl(), $preparedQueryParams);
+        $apiResponse->throw();
+
+        return $this->rainDataMapper->map($apiResponse);
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function getSnowfallData(
+        string      $startDate,
+        string      $endDate,
+        CoordinatesData $coordinatesData
+    ): SnowfallData
+    {
+        $preparedQueryParams = $this->prepareQueryParams($startDate, $endDate, $coordinatesData);
+        $preparedQueryParams['hourly'] = self::HOURLY_PARAM_VALUE_SNOWFALL;
+
+        $apiResponse = Http::get($this->getFormattedBaseUrl(), $preparedQueryParams);
+        $apiResponse->throw();
+
+        return $this->snowfallDataMapper->map($apiResponse);
     }
 
     /**
