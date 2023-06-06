@@ -4,6 +4,7 @@ namespace App\ApiClient\Meteo;
 
 use App\Data\CoordinatesData;
 use App\Data\Meteo\Humidity\HumidityData;
+use App\Data\Meteo\Snowfall\SnowfallData;
 use App\Data\Meteo\Rain\RainData;
 use App\Data\Meteo\Surface_Pressure\SurfacePressureData;
 use App\Data\Meteo\Temperature\TemperatureData;
@@ -17,19 +18,21 @@ class MeteoApiClient
     public const HOURLY_PARAM_VALUE_SURFACE_PRESSURE = 'surface_pressure';
     public const HOURLY_PARAM_VALUE_RAIN = 'rain';
 
+    public const HOURLY_PARAM_VALUE_SNOWFALL = 'snowfall';
 
     private TemperatureDataMapper $temperatureDataMapper;
     private HumidityDataMapper $humidityDataMapper;
     private SurfacePressureDataMapper $surfacePressureDataMapper;
     private RainDataMapper $rainDataMapper;
+    private SnowfallDataMapper $snowfallDataMapper;
     private string $baseUrl;
-
 
     public function __construct(
         TemperatureDataMapper $temperatureDataMapper,
         HumidityDataMapper    $humidityDataMapper,
         SurfacePressureDataMapper $surfacePressureDataMapper,
         RainDataMapper        $rainDataMapper,
+        SnowfallDataMapper    $snowfallDataMapper,
         string                $baseUrl
     )
     {
@@ -38,6 +41,7 @@ class MeteoApiClient
         $this->humidityDataMapper = $humidityDataMapper;
         $this->surfacePressureDataMapper = $surfacePressureDataMapper;
         $this->rainDataMapper = $rainDataMapper;
+        $this->snowfallDataMapper = $snowfallDataMapper;
     }
 
     /**
@@ -110,6 +114,24 @@ class MeteoApiClient
         $apiResponse->throw();
 
         return $this->rainDataMapper->map($apiResponse);
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function getSnowfallData(
+        string      $startDate,
+        string      $endDate,
+        CoordinatesData $coordinatesData
+    ): SnowfallData
+    {
+        $preparedQueryParams = $this->prepareQueryParams($startDate, $endDate, $coordinatesData);
+        $preparedQueryParams['hourly'] = self::HOURLY_PARAM_VALUE_SNOWFALL;
+
+        $apiResponse = Http::get($this->getFormattedBaseUrl(), $preparedQueryParams);
+        $apiResponse->throw();
+
+        return $this->snowfallDataMapper->map($apiResponse);
     }
 
     private function prepareQueryParams(

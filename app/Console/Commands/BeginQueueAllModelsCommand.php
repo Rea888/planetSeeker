@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Console\Commands\Humidity\HumidityBeginQueueCommand;
 use App\Console\Commands\Rain\RainBeginQueueCommand;
+use App\Console\Commands\Snowfall\SnowfallBeginQueueCommand;
 use App\Console\Commands\Surface_Pressure\SurfacePressureBeginQueueCommand;
 use App\Console\Commands\Temperature\TemperatureBeginQueueCommand;
 use Illuminate\Console\Command;
@@ -21,6 +22,7 @@ class BeginQueueAllModelsCommand extends Command
         $this->call(HumidityBeginQueueCommand::class);
         $this->call(SurfacePressureBeginQueueCommand::class);
         $this->call(RainBeginQueueCommand::class);
+        $this->call(SnowfallBeginQueueCommand::class);
     }
 }
 
