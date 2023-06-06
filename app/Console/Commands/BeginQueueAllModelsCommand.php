@@ -23,6 +23,7 @@ class BeginQueueAllModelsCommand extends Command
         $this->call(SurfacePressureBeginQueueCommand::class);
         $this->call(RainBeginQueueCommand::class);
         $this->call(SnowfallBeginQueueCommand::class);
+        $this->call(CloudcoverBeginQueueCommand::class);
     }
 }
 

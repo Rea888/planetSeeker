@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\ApiClient\Google\CoordinatesDataMapper;
 use App\ApiClient\Google\GoogleApiClient;
+use App\ApiClient\Meteo\CloudcoverDataMapper;
 use App\ApiClient\Meteo\HumidityDataMapper;
 use App\ApiClient\Meteo\MeteoApiClient;
 use App\ApiClient\Meteo\SnowfallDataMapper;
@@ -36,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
                 $app->make(SurfacePressureDataMapper::class),
                 $app->make(RainDataMapper::class),
                 $app->make(SnowfallDataMapper::class),
+                $app->make(CloudcoverDataMapper::class),
                 config('services.weather_api.base_url')
             );
         });

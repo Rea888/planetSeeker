@@ -3,6 +3,7 @@
 namespace App\ApiClient\Meteo;
 
 use App\Data\CoordinatesData;
+use App\Data\Meteo\Cloudcover\CloudcoverData;
 use App\Data\Meteo\Humidity\HumidityData;
 use App\Data\Meteo\Snowfall\SnowfallData;
 use App\Data\Meteo\Rain\RainData;
@@ -19,12 +20,14 @@ class MeteoApiClient
     public const HOURLY_PARAM_VALUE_RAIN = 'rain';
 
     public const HOURLY_PARAM_VALUE_SNOWFALL = 'snowfall';
+    public const HOURLY_PARAM_VALUE_CLOUDCOVER = 'cloudcover';
 
     private TemperatureDataMapper $temperatureDataMapper;
     private HumidityDataMapper $humidityDataMapper;
     private SurfacePressureDataMapper $surfacePressureDataMapper;
     private RainDataMapper $rainDataMapper;
     private SnowfallDataMapper $snowfallDataMapper;
+    private CloudcoverDataMapper $cloudcoverDataMapper;
     private string $baseUrl;
 
     public function __construct(
@@ -33,6 +36,7 @@ class MeteoApiClient
         SurfacePressureDataMapper $surfacePressureDataMapper,
         RainDataMapper        $rainDataMapper,
         SnowfallDataMapper    $snowfallDataMapper,
+        CloudcoverDataMapper  $cloudcoverDataMapper,
         string                $baseUrl
     )
     {
@@ -42,6 +46,7 @@ class MeteoApiClient
         $this->surfacePressureDataMapper = $surfacePressureDataMapper;
         $this->rainDataMapper = $rainDataMapper;
         $this->snowfallDataMapper = $snowfallDataMapper;
+        $this->cloudcoverDataMapper = $cloudcoverDataMapper;
     }
 
     /**
@@ -132,6 +137,24 @@ class MeteoApiClient
         $apiResponse->throw();
 
         return $this->snowfallDataMapper->map($apiResponse);
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function getCloudcoverData(
+        string      $startDate,
+        string      $endDate,
+        CoordinatesData $coordinatesData
+    ): CloudcoverData
+    {
+        $preparedQueryParams = $this->prepareQueryParams($startDate, $endDate, $coordinatesData);
+        $preparedQueryParams['hourly'] = self::HOURLY_PARAM_VALUE_CLOUDCOVER;
+
+        $apiResponse = Http::get($this->getFormattedBaseUrl(), $preparedQueryParams);
+        $apiResponse->throw();
+
+        return $this->cloudcoverDataMapper->map($apiResponse);
     }
 
     private function prepareQueryParams(
