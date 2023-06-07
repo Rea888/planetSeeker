@@ -12,6 +12,7 @@ use App\ApiClient\Meteo\RainDataMapper;
 use App\ApiClient\Meteo\ShortwaveRadiationDataMapper;
 use App\ApiClient\Meteo\SurfacePressureDataMapper;
 use App\ApiClient\Meteo\TemperatureDataMapper;
+use App\ApiClient\Meteo\WindspeedDataMapper;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -40,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
                 $app->make(SnowfallDataMapper::class),
                 $app->make(CloudcoverDataMapper::class),
                 $app->make(ShortwaveRadiationDataMapper::class),
+                $app->make(WindspeedDataMapper::class),
                 config('services.weather_api.base_url')
             );
         });

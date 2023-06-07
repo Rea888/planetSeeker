@@ -8,6 +8,7 @@ use App\Console\Commands\Snowfall\SnowfallBeginQueueCommand;
 use App\Console\Commands\Shortwave_Radiation\ShortwaveRadiationBeginQueueCommand;
 use App\Console\Commands\Surface_Pressure\SurfacePressureBeginQueueCommand;
 use App\Console\Commands\Temperature\TemperatureBeginQueueCommand;
+use App\Console\Commands\Windspeed\WindspeedBeginQueueCommand;
 use Illuminate\Console\Command;
 
 
@@ -26,6 +27,7 @@ class BeginQueueAllModelsCommand extends Command
         $this->call(SnowfallBeginQueueCommand::class);
         $this->call(CloudcoverBeginQueueCommand::class);
         $this->call(ShortwaveRadiationBeginQueueCommand::class);
+        $this->call(WindspeedBeginQueueCommand::class);
     }
 }
 

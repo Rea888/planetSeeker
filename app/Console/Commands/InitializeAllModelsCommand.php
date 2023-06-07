@@ -9,6 +9,7 @@ use App\Console\Commands\Snowfall\SnowfallInitializeCommand;
 use App\Console\Commands\Shortwave_Radiation\ShortwaveRadiationInitializeCommand;
 use App\Console\Commands\Surface_Pressure\SurfacePressureInitializeCommand;
 use App\Console\Commands\Temperature\TemperatureInitializeCommand;
+use App\Console\Commands\Windspeed\WindspeedInitializeCommand;
 use Illuminate\Console\Command;
 class InitializeAllModelsCommand extends Command
 {
@@ -25,5 +26,6 @@ class InitializeAllModelsCommand extends Command
         $this->call(SnowfallInitializeCommand::class);
         $this->call(CloudcoverInitializeCommand::class);
         $this->call(ShortwaveRadiationInitializeCommand::class);
+        $this->call(WindspeedInitializeCommand::class);
     }
 }
