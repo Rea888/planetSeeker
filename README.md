@@ -1,3 +1,6 @@
+About: displays weather measurement data for the past 10 years until the current time, on an hourly basis, for five cities: Paris, Moscow, London, Tokyo, and Washington.
+
+
 To devops:
 
 Dependencies:
